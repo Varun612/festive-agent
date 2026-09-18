@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FestiveAgent AI — Autonomous 3D Festival Creative Director Studio</title>
+  <meta name="description" content="Autonomous 3D AI Agent generating culturally authentic, brand-preserved festival marketing campaigns for Kandhari Tent & Caterers & Dwarka Shri Lawn, Lucknow." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Nirmala+UI:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-dark: #06070a;
+      --bg-surface: #0c0e17;
+      --bg-card: rgba(16, 19, 31, 0.75);
+      --bg-card-hover: rgba(22, 26, 42, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-gold: #d4af37;
+      --border-gold-glow: rgba(212, 175, 55, 0.45);
+      --gold-primary: #f59e0b;
+      --gold-light: #fef08a;
+      --gold-dark: #b45309;
+      --primary-accent: #6366f1;
+      --primary-accent-glow: rgba(99, 102, 241, 0.4);
+      --emerald-glow: rgba(16, 185, 129, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+      perspective: 1400px;
+    }
+
+    /* 3D Cosmic Background Ambient Mesh */
+    .ambient-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(circle at 20% 15%, rgba(99, 102, 241, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 80% 25%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(236, 72, 153, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+    }
+
+    /* 3D Grid floor perspective */
+    .perspective-grid {
+      position: fixed;
+      bottom: -30vh;
+      left: -20vw;
+      width: 140vw;
+      height: 80vh;
+      background-image: 
+        linear-gradient(to right, rgba(212, 175, 55, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transform: rotateX(75deg);
+      pointer-events: none;
+      z-index: 0;
+      mask-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 80%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 80%);
+    }
+
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Glass Navbar with 3D Bevel */
+    header.navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(6, 7, 10, 0.82);
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 -1px 0 rgba(212, 175, 55, 0.15);
+      padding: 16px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+
+    .brand-logo-3d {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #1e1b4b, #312e81 60%, #1e1035);
+      border: 1.5px solid var(--border-gold);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 0 25px var(--border-gold-glow), 0 8px 16px rgba(0,0,0,0.4);
+      transform: translateZ(10px);
+      transition: var(--transition);
+    }
+    .brand-logo-3d:hover {
+      transform: scale(1.08) rotate(5deg);
+    }
+
+    .brand-titles h1 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-titles h1 span.version-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+      color: var(--gold-light);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-full);
+      letter-spacing: 0.6px;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .brand-titles p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      letter-spacing: 0.2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* 3D Button Utility */
+    .btn-3d {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 12px 22px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid transparent;
+      user-select: none;
+      transform-style: preserve-3d;
+      will-change: transform, box-shadow;
+    }
+
+    .btn-3d:active {
+      transform: translateY(2px) scale(0.98);
+    }
+
+    .btn-3d-gold {
+      background: linear-gradient(135deg, #f59e0b 0%, #d4af37 50%, #b45309 100%);
+      color: #1a0802;
+      border-color: #ffd700;
+      box-shadow: 
+        0 6px 0 #78350f,
+        0 12px 24px rgba(245, 158, 11, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+    .btn-3d-gold:hover {
+      background: linear-gradient(135deg, #fbbf24 0%, #eab308 50%, #ca8a04 100%);
+      box-shadow: 
+        0 8px 0 #78350f,
+        0 16px 30px rgba(245, 158, 11, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      transform: translateY(-2px);
+    }
+    .btn-3d-gold:active {
+      box-shadow: 0 2px 0 #78350f, 0 6px 12px rgba(245, 158, 11, 0.3);
+      transform: translateY(4px);
+    }
+
+    .btn-3d-linkedin {
+      background: linear-gradient(135deg, #0a66c2 0%, #004182 100%);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 
+        0 5px 0 #002952,
+        0 10px 20px rgba(10, 102, 194, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    .btn-3d-linkedin:hover {
+      background: linear-gradient(135deg, #0d78e3 0%, #0a66c2 100%);
+      box-shadow: 
+        0 7px 0 #002952,
+        0 14px 26px rgba(10, 102, 194, 0.45);
+      transform: translateY(-2px);
+    }
+    .btn-3d-linkedin:active {
+      box-shadow: 0 2px 0 #002952, 0 4px 10px rgba(10, 102, 194, 0.3);
+      transform: translateY(3px);
+    }
+
+    .btn-3d-surface {
+      background: linear-gradient(135deg, #1e2337 0%, #131726 100%);
+      color: #f8fafc;
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 
+        0 5px 0 #0c0e18,
+        0 10px 20px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+    .btn-3d-surface:hover {
+      background: linear-gradient(135deg, #262c45 0%, #1a1e32 100%);
+      border-color: var(--border-gold);
+      box-shadow: 
+        0 7px 0 #0c0e18,
+        0 14px 25px rgba(212, 175, 55, 0.2);
+      transform: translateY(-2px);
+    }
+    .btn-3d-surface:active {
+      box-shadow: 0 2px 0 #0c0e18;
+      transform: translateY(3px);
+    }
+
+    /* Mind pill badge */
+    .mind-pill-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+    }
+    .mind-pill-badge:hover {
+      background: rgba(16, 185, 129, 0.2);
+      transform: translateY(-1px);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulseAnim 2s infinite;
+    }
+    @keyframes pulseAnim {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Hero Section with 3D Hologram styling */
+    .hero-3d {
+      padding: 50px 0 35px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 20px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(99, 102, 241, 0.1));
+      border: 1px solid var(--border-gold);
+      color: var(--gold-light);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+    }
+
+    .hero-3d h2 {
+      font-size: clamp(34px, 5vw, 56px);
+      font-weight: 900;
+      line-height: 1.12;
+      letter-spacing: -1.2px;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 20%, #e2e8f0 55%, #facc15 85%, #d4af37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    }
+
+    .hero-3d p.lead {
+      max-width: 860px;
+      margin: 0 auto 34px;
+      font-size: clamp(16px, 2vw, 19px);
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 3D Value Badges */
+    .metrics-ribbon-3d {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .metric-pill-3d {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      background: rgba(18, 22, 36, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      transition: var(--transition);
+      transform-style: preserve-3d;
+    }
+    .metric-pill-3d:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-3px) translateZ(10px);
+      box-shadow: 0 10px 24px rgba(212, 175, 55, 0.2);
+    }
+
+    /* Main Studio 3D Layout */
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 480px 1fr;
+      gap: 32px;
+      margin-bottom: 80px;
+      align-items: start;
+    }
+    @media (max-width: 1120px) {
+      .studio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 3D Glass Cards */
+    .card-3d {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .card-3d::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+    }
+
+    .card-header-3d {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .card-title-3d {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .step-badge-3d {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 15px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    /* 3D Festival Selection Deck with AI Art Thumbnails */
+    .festivals-deck-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .festivals-3d-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .festivals-3d-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+    .festivals-3d-grid::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, 0.3);
+      border-radius: 4px;
+    }
+
+    .fest-card-3d {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: rgba(18, 22, 34, 0.6);
+      border: 1.5px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .fest-card-3d:hover {
+      background: rgba(28, 33, 52, 0.85);
+      border-color: rgba(212, 175, 55, 0.5);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+    .fest-card-3d.active {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(30, 27, 75, 0.6) 100%);
+      border-color: var(--border-gold);
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.35), inset 0 0 15px rgba(212, 175, 55, 0.15);
+    }
+    .fest-card-3d.active::after {
+      content: '✓';
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.3);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fest-thumb-3d {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1.5px solid rgba(212, 175, 55, 0.5);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      flex-shrink: 0;
+    }
+
+    .fest-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .fest-info .name {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .fest-info .meta {
+      font-size: 11px;
+      color: var(--gold-light);
+      opacity: 0.85;
+    }
+
+    /* Custom Name Input */
+    .input-group {
+      margin-bottom: 20px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .input-wrapper input {
+      width: 100%;
+      background: rgba(9, 11, 18, 0.8);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 13px 18px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+      transition: var(--transition);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    }
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: var(--border-gold);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), inset 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    /* Dual Dropzones */
+    .dropzones-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .dropzone-card {
+      position: relative;
+      background: rgba(12, 15, 24, 0.7);
+      border: 1.5px dashed rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .dropzone-card:hover {
+      border-color: var(--border-gold);
+      background: rgba(212, 175, 55, 0.05);
+      transform: translateY(-2px);
+    }
+    .dropzone-card input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .dz-icon {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+    .dz-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .dz-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .dz-status {
+      font-size: 11px;
+      font-weight: 700;
+      color: #34d399;
+      margin-top: 6px;
+      display: none;
+    }
+
+    /* Generate and Get New Design Buttons */
+    .actions-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-generate-main {
+      width: 100%;
+      padding: 16px 24px;
+      font-size: 16px;
+    }
+
+    .btn-new-design-prominent {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 15px;
+    }
+
+    /* Stepper HUD */
+    .stepper-hud {
+      margin-top: 24px;
+      padding: 18px;
+      background: rgba(9, 12, 20, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: var(--radius-md);
+      display: none;
+    }
+    .stepper-hud.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    .stepper-hud h4 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .step-item:last-child {
+      margin-bottom: 0;
+    }
+    .step-item.working {
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .step-item.done {
+      color: #34d399;
+    }
+    .step-indicator {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .step-item.working .step-indicator {
+      background: var(--gold-primary);
+      color: #000;
+      animation: spin 1s linear infinite;
+    }
+    .step-item.done .step-indicator {
+      background: #10b981;
+      color: #fff;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* RIGHT COLUMN: INTERACTIVE 3D POSTER STAGE */
+    .stage-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Empty state */
+    .empty-state-3d {
+      padding: 70px 30px;
+      text-align: center;
+      background: rgba(14, 17, 27, 0.6);
+      border: 2px dashed rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      width: 100%;
+    }
+    .empty-icon-3d {
+      font-size: 56px;
+      margin-bottom: 16px;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* 3D Poster Display Stage */
+    .poster-3d-stage {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      perspective: 1200px;
+      transform-style: preserve-3d;
+      margin: 0 auto 24px;
+      display: none;
+    }
+    .poster-3d-stage.active {
+      display: block;
+      animation: posterPop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes posterPop {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .poster-card-3d {
+      position: relative;
+      border-radius: var(--radius-lg);
+      background: #100517;
+      border: 2.5px solid var(--border-gold);
+      box-shadow: 
+        0 25px 60px -10px rgba(0, 0, 0, 0.8),
+        0 15px 35px -15px rgba(212, 175, 55, 0.4),
+        0 0 30px rgba(212, 175, 55, 0.15);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s ease-out, box-shadow 0.25s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .poster-card-3d:hover {
+      box-shadow: 
+        0 35px 80px -10px rgba(0, 0, 0, 0.9),
+        0 20px 45px -15px rgba(212, 175, 55, 0.6),
+        0 0 45px rgba(212, 175, 55, 0.3);
+    }
+
+    .poster-card-3d img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: calc(var(--radius-lg) - 3px);
+    }
+
+    /* Specular dynamic light glare over poster */
+    .glare-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 65%);
+      mix-blend-mode: overlay;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    /* 3D Holographic Invariant Badge */
+    .holographic-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(10, 5, 20, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      transform: translateZ(30px);
+      pointer-events: none;
+    }
+
+    /* Corner ornamental gold brackets */
+    .corner-bracket {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border: 2.5px solid var(--border-gold);
+      pointer-events: none;
+      transform: translateZ(25px);
+    }
+    .corner-bracket.top-left { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+    .corner-bracket.top-right { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+    .corner-bracket.bottom-left { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+    .corner-bracket.bottom-right { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+    /* Theme Variation Bar */
+    .theme-header-bar {
+      width: 100%;
+      max-width: 540px;
+      margin-bottom: 14px;
+      padding: 10px 18px;
+      background: rgba(16, 20, 32, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: var(--radius-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+    }
+
+    /* 3D Action Toolbar */
+    .stage-actions-bar {
+      width: 100%;
+      max-width: 540px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    /* Inspector & Customizer Card */
+    .inspector-card-3d {
+      width: 100%;
+      max-width: 540px;
+      background: rgba(14, 18, 30, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .inspector-card-3d h4 {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .inspector-section {
+      margin-bottom: 14px;
+    }
+    .inspector-section:last-child {
+      margin-bottom: 0;
+    }
+    .inspector-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 6px;
+    }
+    .inspector-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .inspector-chip {
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .inspector-chip:hover {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--border-gold);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Pre-generated Showcase Carousel Gallery */
+    .showcase-section {
+      padding: 40px 0 70px;
+    }
+    .showcase-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .showcase-header h3 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .showcase-header p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .showcase-grid-3d {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .showcase-card-3d {
+      position: relative;
+      background: rgba(16, 20, 32, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .showcase-card-3d:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(212, 175, 55, 0.25);
+    }
+    .showcase-card-3d img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+    .showcase-info {
+      padding: 14px 16px;
+      background: rgba(10, 12, 20, 0.9);
+      border-top: 1px solid var(--border-subtle);
+    }
+    .showcase-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .showcase-meta {
+      font-size: 12px;
+      color: var(--gold-light);
+      margin-top: 2px;
+    }
+
+    /* 3D FLOATING CHATBOT ORB */
+    .chatbot-orb-trigger {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 22px;
+      background: linear-gradient(135deg, #1e1035, #2a0845);
+      border: 2px solid var(--border-gold);
+      border-radius: var(--radius-full);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(212, 175, 55, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+    .chatbot-orb-trigger:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.8),
+        0 0 45px rgba(212, 175, 55, 0.6);
+    }
+    .orb-pulse-core {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fef08a 10%, #d4af37 60%, #b45309 100%);
+      box-shadow: 0 0 15px #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .orb-text {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.2px;
+    }
+
+    /* Chatbot Window */
+    .chatbot-window-3d {
+      position: fixed;
+      bottom: 95px;
+      right: 30px;
+      width: 420px;
+      max-width: calc(100vw - 40px);
+      height: 560px;
+      background: rgba(12, 14, 24, 0.94);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 2px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(212, 175, 55, 0.25);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(25px) scale(0.95);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .chatbot-window-3d.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .chat-header-3d {
+      padding: 16px 20px;
+      background: rgba(18, 22, 38, 0.9);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-header-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .chat-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .chat-close-btn:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .chat-body-3d {
+      flex: 1;
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .chat-msg {
+      max-width: 88%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .chat-msg.bot {
+      align-self: flex-start;
+      background: rgba(26, 32, 54, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #f1f5f9;
+      border-bottom-left-radius: 4px;
+    }
+    .chat-msg.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    }
+
+    .chat-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .chat-chip-btn {
+      padding: 5px 11px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: var(--radius-full);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--gold-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .chat-chip-btn:hover {
+      background: rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .chat-footer-3d {
+      padding: 14px;
+      background: rgba(14, 17, 28, 0.95);
+      border-top: 1px solid var(--border-subtle);
+    }
+    .chat-form {
+      display: flex;
+      gap: 10px;
+    }
+    .chat-input {
+      flex: 1;
+      background: rgba(8, 10, 16, 0.8);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 10px 18px;
+      font-family: inherit;
+      font-size: 13.5px;
+      color: #ffffff;
+    }
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--border-gold);
+    }
+    .chat-send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+      border: none;
+      color: #000;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    /* Modal Dialogs */
+    .modal-backdrop-3d {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 20px;
+    }
+    .modal-backdrop-3d.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box-3d {
+      background: #0f121e;
+      border: 2px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.8), 0 0 50px rgba(212, 175, 55, 0.25);
+      position: relative;
+    }
+
+    .modal-close-x {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border-subtle);
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      color: #fff;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .modal-close-x:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Toast */
+    .toast-3d {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-30px);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1.5px solid var(--border-gold);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.3);
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 14px;
+      z-index: 3000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast-3d.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer.site-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 50px 0 30px;
+      text-align: center;
+      background: rgba(4, 5, 8, 0.9);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-bg"></div>
+  <div class="perspective-grid"></div>
+
+  <!-- Glass Navbar with 3D Accents -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="brand-group">
+        <div class="brand-logo-3d">👑</div>
+        <div class="brand-titles">
+          <h1>FestiveAgent <span class="version-tag">3D STUDIO</span></h1>
+          <p>Autonomous Festival Marketing Agent for Kandhari Tent &amp; Caterers</p>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <div class="mind-pill-badge" onclick="openPersistentMindModal()" title="Click to view AI Director Persistent Mind & Rules">
+          <div class="pulse-dot"></div>
+          <span id="mindStatusText">🧠 Persistent Mind: 4 Rules Active</span>
+        </div>
+
+        <button class="btn-3d btn-3d-linkedin" onclick="openLinkedInShowcaseModal()">
+          <span>🚀</span>
+          <span>Showcase on LinkedIn</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="container hero-3d">
+    <div class="hero-chip">
+      <span>✨</span>
+      <span>Autonomous GenAI Multi-Agent System</span>
+      <span>•</span>
+      <span>Strict Clean-Canvas Engine</span>
+    </div>
+
+    <h2>High-Impact Festival Marketing<br />Designed Dynamically from Clean Canvas</h2>
+    
+    <p class="lead">
+      Autonomous creative director engineered for <strong>Kandhari Tent &amp; Caterers</strong> and <strong>Dwarka Shri Lawn</strong>. 
+      Mathematically isolated 6-layer architecture guarantees <strong>zero leftover elements</strong> across Diwali, Christmas, Eid, Holi &amp; 11+ cultural celebrations.
+    </p>
+
+    <!-- 3D Feature Metric Pills -->
+    <div class="metrics-ribbon-3d">
+      <div class="metric-pill-3d">
+        <span>🛡️</span>
+        <span>Zone A 100% Invariants Locked</span>
+      </div>
+      <div class="metric-pill-3d">
+        <span>🎨</span>
+        <span>6-Layer Clean-Canvas Compositor</span>
+      </div>
+      <div class="metric-pill-3d">
+        <span>🧠</span>
+        <span>Continuous Persistent Learning</span>
+      </div>
+      <div class="metric-pill-3d">
+        <span>✨</span>
+        <span>Zero Leftover Cross-Festival Bleed</span>
+      </div>
+      <div class="metric-pill-3d">
+        <span>⚡</span>
+        <span>Groq Qwen Vision + Sharp Vector</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main 3D Studio -->
+  <section class="container" id="studio">
+    <div class="studio-grid">
+      
+      <!-- Left Column: Controls & 3D Festival Deck -->
+      <div class="card-3d">
+        <div class="card-header-3d">
+          <div class="card-title-3d">
+            <div class="step-badge-3d">1</div>
+            <span>Creative Direction</span>
+          </div>
+          <span style="font-size: 12.5px; color: var(--gold-light); font-weight: 700;">Clean-Canvas Suite</span>
+        </div>
+
+        <!-- 3D Festival Deck with AI Art Thumbnails -->
+        <div class="festivals-deck-label">
+          <span>SELECT FESTIVAL (AI MOTIF PREVIEWS)</span>
+          <span style="color: var(--gold-light);">11 Supported</span>
+        </div>
+
+        <div class="festivals-3d-grid" id="festivalsDeck">
+          <!-- Populated by JavaScript with AI motif pictures -->
+        </div>
+
+        <!-- Festival Name Override -->
+        <div class="input-group">
+          <label for="festivalInput">Active Festival Name</label>
+          <div class="input-wrapper">
+            <input type="text" id="festivalInput" value="Diwali" placeholder="e.g. Diwali, Christmas, Eid, Holi..." />
+          </div>
+        </div>
+
+        <!-- Dual Dropzones -->
+        <div class="dropzones-grid">
+          <div class="dropzone-card" id="refCard">
+            <input type="file" id="refFile" accept="image/*" onchange="handleFileSelected('refFile', 'refStatus', 'refCard')" />
+            <div class="dz-icon">🖼️</div>
+            <div class="dz-title">Image 1: Reference</div>
+            <div class="dz-desc">Visual mood &amp; palette</div>
+            <div class="dz-status" id="refStatus">✓ Reference Attached</div>
+          </div>
+
+          <div class="dropzone-card" id="busCard">
+            <input type="file" id="busFile" accept="image/*" onchange="handleFileSelected('busFile', 'busStatus', 'busCard')" />
+            <div class="dz-icon">💼</div>
+            <div class="dz-title">Image 2: Master Card</div>
+            <div class="dz-desc">Kandhari Master truth</div>
+            <div class="dz-status" id="busStatus">✓ Master Attached</div>
+          </div>
+        </div>
+
+        <!-- Primary Action Stack: Generate Poster & Get New Design -->
+        <div class="actions-stack">
+          <!-- Prominent Get New Design Button -->
+          <button class="btn-3d btn-3d-gold btn-new-design-prominent" id="getNewDesignBtn" onclick="getNewDesign()">
+            <span>✨</span>
+            <span>GET NEW DESIGN</span>
+          </button>
+
+          <button class="btn-3d btn-3d-surface btn-generate-main" id="generateBtn" onclick="runCreateCampaign()">
+            <span>🎨</span>
+            <span>GENERATE FROM SCRATCH</span>
+          </button>
+        </div>
+
+        <!-- Stepper HUD -->
+        <div class="stepper-hud" id="stepperHud">
+          <h4><span>⚙️</span> Autonomous AI Agent Designing...</h4>
+          <div class="step-item" id="step1">
+            <div class="step-indicator">1</div>
+            <span>Extracting cultural symbolism &amp; AI motif artwork...</span>
+          </div>
+          <div class="step-item" id="step2">
+            <div class="step-indicator">2</div>
+            <span>Locking Zone A protected phone numbers &amp; Lucknow address...</span>
+          </div>
+          <div class="step-item" id="step3">
+            <div class="step-indicator">3</div>
+            <span>Synthesizing poetic blessings &amp; persistent brand rules...</span>
+          </div>
+          <div class="step-item" id="step4">
+            <div class="step-indicator">4</div>
+            <span>Rendering 1085×1449 6-layer clean canvas poster...</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Interactive 3D Poster Showcase Stage -->
+      <div class="card-3d stage-container">
+        
+        <!-- Empty State -->
+        <div class="empty-state-3d" id="emptyState">
+          <div class="empty-icon-3d">🎨</div>
+          <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 10px;">Your 3D Creative Appears Here</h3>
+          <p style="color: var(--text-muted); font-size: 14.5px; max-width: 440px; margin: 0 auto 24px;">
+            Click <strong>"Get New Design"</strong> or select any festival on the left to watch the autonomous AI director construct a brand-new poster.
+          </p>
+          <button class="btn-3d btn-3d-gold" onclick="getNewDesign()">
+            <span>⚡</span>
+            <span>Try Live Demo: Get Diwali Design</span>
+          </button>
+        </div>
+
+        <!-- Active 3D Poster Stage -->
+        <div class="theme-header-bar" id="themeHeaderBar" style="display: none;">
+          <span id="themeTitle">🎨 <strong>Variation 1 of 3:</strong> Radiant Gold</span>
+          <span style="font-size: 12px; color: var(--gold-light); cursor: pointer; font-weight: 700;" onclick="getNewDesign()">
+            Switch Variation ↻
+          </span>
+        </div>
+
+        <div class="poster-3d-stage" id="posterStage">
+          <div class="poster-card-3d" id="posterCard3d" onclick="openLightbox()">
+            <!-- Holographic Seal -->
+            <div class="holographic-badge">
+              <span>🛡️</span>
+              <span>Zone A Invariants Locked</span>
+            </div>
+
+            <!-- 4 Corner Brackets -->
+            <div class="corner-bracket top-left"></div>
+            <div class="corner-bracket top-right"></div>
+            <div class="corner-bracket bottom-left"></div>
+            <div class="corner-bracket bottom-right"></div>
+
+            <!-- Dynamic Specular Glare -->
+            <div class="glare-overlay" id="glareOverlay"></div>
+
+            <img id="posterImg" src="" alt="Generated Festival Poster" />
+          </div>
+        </div>
+
+        <!-- 3D Action Toolbar -->
+        <div class="stage-actions-bar" id="stageActionsBar" style="display: none;">
+          <a id="downloadLink" href="#" download class="btn-3d btn-3d-gold">
+            <span>📥</span>
+            <span>Download HD Poster</span>
+          </a>
+          <button class="btn-3d btn-3d-surface" onclick="getNewDesign()">
+            <span>🎲</span>
+            <span>Next Variation</span>
+          </button>
+        </div>
+
+        <!-- Interactive Section Inspector -->
+        <div class="inspector-card-3d" id="sectionInspector" style="display: none;">
+          <h4><span>🎯</span> One-Click Section Customizer</h4>
+
+          <div class="inspector-section">
+            <div class="inspector-label">🎨 BACKGROUND ATMOSPHERE</div>
+            <div class="inspector-chips">
+              <button class="inspector-chip" onclick="quickApplyOverride('The background color should be lilac pink from blue')">🌸 Lilac Pink</button>
+              <button class="inspector-chip" onclick="quickApplyOverride('For holi add multi-color splashes in the background of the template')">💦 Multi-Color Splashes</button>
+              <button class="inspector-chip" onclick="quickApplyOverride('Change background color to deep royal navy blue')">🌌 Royal Navy</button>
+              <button class="inspector-chip" onclick="quickApplyOverride('Apply royal printed damask texture to fill blank spaces')">📜 Royal Damask</button>
+              <button class="inspector-chip" onclick="quickApplyOverride('Change background pattern to winter stars')">❄️ Winter Stars</button>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="inspector-label">📞 ZONE A CONTACT DETAILS</div>
+            <div class="inspector-chips">
+              <button class="inspector-chip" onclick="quickApplyOverride('The three mobile numbers are added, I want the text color to golden')">🌟 Golden Numbers</button>
+              <button class="inspector-chip" onclick="quickApplyOverride('Make mobile numbers text color silver')">🥈 Silver Numbers</button>
+              <button class="inspector-chip" onclick="quickApplyOverride('Change Dwarka Shri Lawn font color to gold')">🏛️ Gold Dwarka Lawn</button>
+              <button class="inspector-chip" onclick="quickApplyOverride('Make Kandhari brand text royal gold foil')">👑 Gold Kandhari</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Showcase Gallery Section -->
+  <section class="container showcase-section">
+    <div class="showcase-header">
+      <div class="hero-chip" style="margin-bottom: 12px;">Pre-Rendered Portfolio Highlights</div>
+      <h3>Multi-Cultural Clean-Canvas Creations</h3>
+      <p>Click any poster to inspect the ultra-sharp vector details, verified contact footer, and real venue setup photography.</p>
+    </div>
+
+    <div class="showcase-grid-3d" id="galleryGrid">
+      <!-- Loaded dynamically -->
+    </div>
+  </section>
+
+  <!-- Fullscreen Lightbox Modal -->
+  <div class="modal-backdrop-3d" id="lightboxModal" onclick="closeLightbox()">
+    <div class="modal-box-3d" style="max-width: 580px; padding: 15px; text-align: center;" onclick="event.stopPropagation()">
+      <div class="modal-close-x" onclick="closeLightbox()">✕</div>
+      <img id="lightboxImg" src="" style="width: 100%; border-radius: 12px; display: block;" alt="Zoomed Poster" />
+      <div style="margin-top: 14px; display: flex; justify-content: center; gap: 12px;">
+        <a id="lightboxDownloadBtn" href="#" download class="btn-3d btn-3d-gold">
+          <span>📥</span> Download 1085×1449 HD
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Persistent Mind Modal -->
+  <div class="modal-backdrop-3d" id="mindModal" onclick="closePersistentMindModal()">
+    <div class="modal-box-3d" onclick="event.stopPropagation()">
+      <div class="modal-close-x" onclick="closePersistentMindModal()">✕</div>
+      <h3 style="font-size: 22px; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <span>🧠</span> AI Director Persistent Mind
+      </h3>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 22px;">
+        The AI Director trains continuously on your feedback. System learned rules are permanently applied to all clean-canvas campaigns.
+      </p>
+
+      <div style="margin-bottom: 20px;">
+        <h4 style="font-size: 13.5px; font-weight: 800; color: var(--gold-light); margin-bottom: 10px; text-transform: uppercase;">
+          Synthesized System Rules
+        </h4>
+        <div id="mindRulesList" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Loaded from /api/learnings -->
+        </div>
+      </div>
+
+      <div>
+        <h4 style="font-size: 13.5px; font-weight: 800; color: #a5b4fc; margin-bottom: 10px; text-transform: uppercase;">
+          Recent User Learnings Log
+        </h4>
+        <div id="mindHistoryList" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+          <!-- Loaded from /api/learnings -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LinkedIn Showcase Pack Modal -->
+  <div class="modal-backdrop-3d" id="linkedinModal" onclick="closeLinkedInShowcaseModal()">
+    <div class="modal-box-3d" style="max-width: 640px;" onclick="event.stopPropagation()">
+      <div class="modal-close-x" onclick="closeLinkedInShowcaseModal()">✕</div>
+      <div class="hero-chip" style="margin-bottom: 10px;">🚀 Ready-To-Publish Showcase Pack</div>
+      <h3 style="font-size: 24px; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
+        Showcase Your AI Engineering on LinkedIn
+      </h3>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
+        Copy this polished, viral post draft formatted with technical architecture highlights, metrics, and hashtags:
+      </p>
+
+      <div style="background: rgba(8, 10, 18, 0.9); border: 1.5px solid var(--border-gold); border-radius: var(--radius-md); padding: 18px; margin-bottom: 20px;">
+        <textarea id="linkedinPostText" rows="12" style="width: 100%; background: transparent; border: none; color: #f8fafc; font-family: inherit; font-size: 13.5px; line-height: 1.6; resize: none; outline: none;"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap;">
+        <button class="btn-3d btn-3d-surface" onclick="copyLinkedInText()">
+          <span>📋</span> Copy Post to Clipboard
+        </button>
+        <a id="linkedinDownloadPosterBtn" href="#" download class="btn-3d btn-3d-gold">
+          <span>📥</span> Download Poster Image
+        </a>
+        <a id="linkedinDirectShareBtn" href="https://www.linkedin.com/sharing/share-offsite/" target="_blank" class="btn-3d btn-3d-linkedin">
+          <span>🚀</span> Open LinkedIn
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating 3D AI Orb Trigger -->
+  <div class="chatbot-orb-trigger" id="chatbotOrb" onclick="toggleChatbot()" title="Chat with AI Creative Director">
+    <div class="orb-pulse-core">✨</div>
+    <span class="orb-text">AI Creative Director</span>
+  </div>
+
+  <!-- 3D Glass Chatbot Window -->
+  <div class="chatbot-window-3d" id="chatbotWindow">
+    <div class="chat-header-3d">
+      <div class="chat-header-title">
+        <span style="font-size: 20px;">👑</span>
+        <div>
+          <div>AI Creative Director</div>
+          <div style="font-size: 11px; color: #34d399; font-weight: 700;">🧠 Persistent Mind Active</div>
+        </div>
+      </div>
+      <button class="chat-close-btn" onclick="toggleChatbot(false)">✕</button>
+    </div>
+
+    <div class="chat-body-3d" id="chatBody">
+      <div class="chat-msg bot">
+        👋 <strong>Namaste!</strong> I'm your AI Creative Director for <em>Kandhari Tent House &amp; Dwarka Shri Lawn</em>.
+        <br/><br/>
+        Tell me any design instruction — I adapt language (English/Hindi), background textures, and remember your preferences:
+        
+        <div class="chat-chips-grid">
+          <div class="chat-chip-btn" onclick="sendChatPrompt('The background color should be lilac pink from blue')">🌸 Lilac Pink Background</div>
+          <div class="chat-chip-btn" onclick="sendChatPrompt('For holi add multi-color splashes in the background of the template')">💦 Multi-Color Splashes</div>
+          <div class="chat-chip-btn" onclick="sendChatPrompt('The three mobile numbers are added, I want the text color to golden')">🌟 Golden Phone Numbers</div>
+          <div class="chat-chip-btn" onclick="sendChatPrompt('Change font color of Dwarka Shri Lawn to silver')">🥈 Silver Dwarka Lawn</div>
+          <div class="chat-chip-btn" onclick="sendChatPrompt('Redesign for Christmas in English with winter stars printed texture')">🎄 Christmas in English</div>
+          <div class="chat-chip-btn" onclick="sendChatPrompt('Apply royal printed damask texture to fill blank spaces')">📜 Royal Damask Wallpaper</div>
+          <div class="chat-chip-btn" onclick="sendChatPrompt('Change ribbon text to \'Grand Weddings & Royal Lawns\'')">🎗️ Grand Weddings Ribbon</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-footer-3d">
+      <form class="chat-form" onsubmit="handleChatSubmit(event)">
+        <input type="text" id="chatInput" class="chat-input" placeholder="Instruct AI Director (e.g. lilac pink background)..." autocomplete="off" />
+        <button type="submit" class="chat-send-btn" title="Send Instruction">➔</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-3d" id="toast">Copied to clipboard!</div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <h3 style="font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 8px;">FestiveAgent AI Studio</h3>
+      <p style="color: var(--text-muted); font-size: 13.5px;">
+        Autonomous Multi-Agent Creative Director • Built for Kandhari Tent &amp; Caterers &amp; Dwarka Shri Lawn, Lucknow
+      </p>
+      <p style="color: var(--text-dim); font-size: 12px; margin-top: 10px;">
+        Powered by Groq Qwen Vision + Sharp 6-Layer Clean-Canvas Engine • Ready for LinkedIn Portfolio Showcase
+      </p>
+    </div>
+  </footer>
+
+  <!-- Native JavaScript -->
+  <script>
+
+    // Dynamic API Base URL resolution: auto-connects port 3000 -> 5000, and works on 5000 natively
+    const API_BASE = (window.location.port === '3000' || (window.location.port !== '5000' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))) 
+      ? 'http://localhost:5000' 
+      : '';
+  
+    // Complete Festival Profiles with Real AI Motif Art
+    const FESTIVAL_DECK = [
+      { name: "Diwali", tag: "Festival of Lights", icon: "🪔", motif: API_BASE + "/assets/motifs/diwali.jpg" },
+      { name: "Ganesh Chaturthi", tag: "Vinayaka Mahotsav", icon: "🐘", motif: API_BASE + "/assets/motifs/ganesh_golden.jpg" },
+      { name: "Maha Shivratri", tag: "Har Har Mahadev", icon: "🔱", motif: API_BASE + "/assets/motifs/shivratri.jpg" },
+      { name: "Holi", tag: "Rangon Ka Tyohar", icon: "🎨", motif: API_BASE + "/assets/motifs/holi.jpg" },
+      { name: "Eid", tag: "Eid Mubarak", icon: "🌙", motif: API_BASE + "/assets/motifs/eid.jpg" },
+      { name: "Christmas", tag: "Season of Joy", icon: "🎄", motif: API_BASE + "/assets/motifs/christmas.jpg" },
+      { name: "Janmashtami", tag: "Gokulashtami", icon: "🦚", motif: API_BASE + "/assets/motifs/janmashtami.jpg" },
+      { name: "Navratri", tag: "Durga Mahotsav", icon: "🗡️", motif: API_BASE + "/assets/motifs/navratri.jpg" },
+      { name: "Shri Ram Navami", tag: "Ayodhya Utsav", icon: "🏹", motif: API_BASE + "/assets/motifs/ram_navami.jpg" },
+      { name: "Raksha Bandhan", tag: "Sacred Bond", icon: "🧵", motif: API_BASE + "/assets/motifs/raksha_bandhan.jpg" }
+    ];
+
+    let currentFestival = "Diwali";
+    let activeCampaign = null;
+    let isChatbotOpen = false;
+
+    // Render Festival Deck Cards with AI art thumbnails
+    function renderFestivalsDeck() {
+      const deck = document.getElementById("festivalsDeck");
+      deck.innerHTML = FESTIVAL_DECK.map(f => `
+        <div class="fest-card-3d ${f.name.toLowerCase() === currentFestival.toLowerCase() ? 'active' : ''}" onclick="selectFestival('${f.name}')">
+          <img class="fest-thumb-3d" src="${f.motif}" alt="${f.name}" onerror="this.src=API_BASE + '/assets/motifs/ganesh_golden.jpg'" />
+          <div class="fest-info">
+            <div class="name">${f.icon} ${f.name}</div>
+            <div class="meta">${f.tag}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectFestival(name) {
+      currentFestival = name;
+      document.getElementById("festivalInput").value = name;
+      renderFestivalsDeck();
+    }
+
+    // Interactive 3D Card Tilt Effect on Mouse Move
+    function init3dCardTilt() {
+      const card = document.getElementById("posterCard3d");
+      const glare = document.getElementById("glareOverlay");
+      if (!card) return;
+
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -9; // Max 9 deg
+        const rotateY = ((x - centerX) / centerX) * 9;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+
+        const glareX = (x / rect.width) * 100;
+        const glareY = (y / rect.height) * 100;
+        glare.style.setProperty("--glare-x", `${glareX}%`);
+        glare.style.setProperty("--glare-y", `${glareY}%`);
+      });
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+      });
+    }
+
+    function handleFileSelected(inputId, statusId, cardId) {
+      const input = document.getElementById(inputId);
+      const status = document.getElementById(statusId);
+      const card = document.getElementById(cardId);
+      if (input.files && input.files[0]) {
+        status.style.display = "block";
+        status.innerText = "✓ " + input.files[0].name.substring(0, 18) + "...";
+        card.style.borderColor = "var(--border-gold)";
+        card.style.background = "rgba(212, 175, 55, 0.1)";
+      }
+    }
+
+    // THE PROMINENT "GET NEW DESIGN" BUTTON HANDLER
+    async function getNewDesign() {
+      const btn = document.getElementById("getNewDesignBtn");
+      if (btn) {
+        btn.style.transform = "translateY(3px) scale(0.97)";
+        setTimeout(() => btn.style.transform = "", 200);
+      }
+
+      if (!activeCampaign) {
+        showToast("✨ Generating your first clean-canvas poster...");
+        await runCreateCampaign();
+        return;
+      }
+
+      // Calculate next variant in rotation
+      const nextVariant = (activeCampaign.variantIndex) % (activeCampaign.totalVariants || 3);
+      showToast(`🎨 Designing Fresh Variant ${nextVariant + 1} of ${activeCampaign.totalVariants || 3}...`);
+      await runCreateCampaign(nextVariant);
+    }
+
+    async function runCreateCampaign(preferredVariant = null) {
+      const festival = document.getElementById("festivalInput").value.trim() || currentFestival;
+      const refFile = document.getElementById("refFile").files[0];
+      const busFile = document.getElementById("busFile").files[0];
+
+      const genBtn = document.getElementById("generateBtn");
+      const newBtn = document.getElementById("getNewDesignBtn");
+      const stepper = document.getElementById("stepperHud");
+
+      if (genBtn) genBtn.disabled = true;
+      if (newBtn) newBtn.disabled = true;
+      stepper.classList.add("active");
+
+      setStep(1, "working");
+      setTimeout(() => { setStep(1, "done"); setStep(2, "working"); }, 1100);
+      setTimeout(() => { setStep(2, "done"); setStep(3, "working"); }, 2200);
+      setTimeout(() => { setStep(3, "done"); setStep(4, "working"); }, 3600);
+
+      const formData = new FormData();
+      formData.append("festival", festival);
+      if (preferredVariant !== null) {
+        formData.append("variant", preferredVariant);
+      }
+      if (refFile) formData.append("referenceCreative", refFile);
+      if (busFile) formData.append("businessCard", busFile);
+
+      try {
+        const response = await fetch(API_BASE + "/api/create-campaign", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Failed to generate campaign");
+        }
+
+        setStep(4, "done");
+        setTimeout(() => {
+          stepper.classList.remove("active");
+          displayResult(data.campaign);
+          showToast("✨ Clean-Canvas Poster Ready!");
+          syncPersistentMindStatus();
+        }, 500);
+
+      } catch (err) {
+        alert("Agent Error: " + err.message);
+        stepper.classList.remove("active");
+      } finally {
+        if (genBtn) genBtn.disabled = false;
+        if (newBtn) newBtn.disabled = false;
+      }
+    }
+
+    function setStep(stepNum, state) {
+      const el = document.getElementById("step" + stepNum);
+      if (!el) return;
+      el.className = "step-item " + state;
+      const ind = el.querySelector(".step-indicator");
+      if (state === "done") {
+        ind.innerText = "✓";
+      } else if (state === "working") {
+        ind.innerText = "⚙️";
+      } else {
+        ind.innerText = stepNum;
+      }
+    }
+
+    function displayResult(campaign) {
+      activeCampaign = campaign;
+      currentFestival = campaign.festival || currentFestival;
+      document.getElementById("festivalInput").value = currentFestival;
+      renderFestivalsDeck();
+
+      document.getElementById("emptyState").style.display = "none";
+      document.getElementById("themeHeaderBar").style.display = "flex";
+      document.getElementById("posterStage").classList.add("active");
+      document.getElementById("stageActionsBar").style.display = "grid";
+      document.getElementById("sectionInspector").style.display = "block";
+
+      const posterImg = document.getElementById("posterImg");
+      const fullImgUrl = campaign.imageUrl.startsWith("http") ? campaign.imageUrl : (API_BASE + campaign.imageUrl);
+      posterImg.src = fullImgUrl;
+
+      document.getElementById("downloadLink").href = fullImgUrl;
+      document.getElementById("lightboxDownloadBtn").href = fullImgUrl;
+      document.getElementById("linkedinDownloadPosterBtn").href = fullImgUrl;
+
+      document.getElementById("themeTitle").innerHTML = 
+        `🎨 <strong>Variation ${campaign.variantIndex} of ${campaign.totalVariants}:</strong> ${campaign.themeName}`;
+
+      prepareLinkedInPost(campaign);
+
+      if (window.innerWidth < 1120) {
+        document.getElementById("posterStage").scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    // Modal Handlers
+    function openLightbox(url = null) {
+      let img = url || (activeCampaign ? activeCampaign.imageUrl : null);
+      if (img && !img.startsWith("http")) img = API_BASE + img;
+      if (!img) return;
+      document.getElementById("lightboxImg").src = img;
+      document.getElementById("lightboxModal").classList.add("active");
+    }
+    function closeLightbox() {
+      document.getElementById("lightboxModal").classList.remove("active");
+    }
+
+    async function openPersistentMindModal() {
+      const modal = document.getElementById("mindModal");
+      modal.classList.add("active");
+
+      try {
+        const res = await fetch(API_BASE + "/api/learnings");
+        const json = await res.json();
+        if (json.success && json.data) {
+          const rules = json.data.systemLearnedRules || [];
+          document.getElementById("mindRulesList").innerHTML = rules.map((r, i) => `
+            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px; padding: 10px 14px;">
+              <span style="color: var(--gold-light); font-weight: 800; font-size: 11.5px; text-transform: uppercase;">[${r.category}]</span>
+              <p style="color: #ffffff; font-size: 13px; margin-top: 3px;">${r.rule}</p>
+            </div>
+          `).join('');
+
+          const history = json.data.interactionHistory || [];
+          document.getElementById("mindHistoryList").innerHTML = history.slice(0, 10).map(h => `
+            <div style="background: rgba(0,0,0,0.4); border-left: 2px solid #6366f1; padding: 8px 12px; font-size: 12px;">
+              <span style="color: #94a3b8;">"${h.userPrompt}"</span> &rarr;
+              <span style="color: #34d399; font-weight: 700;">${h.festival || 'Festival'}</span>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        console.warn("Could not load learnings:", e);
+      }
+    }
+    function closePersistentMindModal() {
+      document.getElementById("mindModal").classList.remove("active");
+    }
+
+    // LINKEDIN SHOWCASE SUITE
+    function prepareLinkedInPost(campaign) {
+      const text = `🚀 Excited to showcase FestiveAgent AI — an Autonomous 3D Multi-Agent Creative Director built for luxury hospitality & event venues!
+
+🎯 The Challenge:
+Creating branded festival promotional posters typically leads to style drift, leftover elements across festivals (e.g. marigolds on Christmas, or trees on Eid), and distorted brand invariants (phone numbers, addresses).
+
+💡 The Architectural Solution:
+1. Strict Clean-Canvas 6-Layer Engine:
+   Every campaign starts from an unpolluted 1085×1449 base canvas. Zero leftover cross-festival bleed!
+2. Zone A Protected Brand Invariants:
+   Kandhari Tent & Caterers' verified phone numbers (9305465848 | 9307908994 | 7355059566) and Lucknow address are preserved with 100% mathematical integrity.
+3. Persistent Mind & Continuous Learning:
+   The AI Creative Director continuously learns user styling preferences (regal gold foil, contact highlighting, custom palettes) and applies them dynamically to future clean-canvas runs.
+4. Multimodal Vision & Vector Compositing:
+   Groq Qwen Vision + Sharp vector pipeline yields production-ready 1085×1449 assets in under 3 seconds!
+
+👉 Active Showcase Poster: ${campaign.festival} (${campaign.themeName})
+💬 Feedback & thoughts welcome!
+
+#ArtificialIntelligence #GenAI #AgenticAI #MachineLearning #WebDevelopment #JavaScript #FullStack #SoftwareEngineering #PortfolioShowcase`;
+
+      document.getElementById("linkedinPostText").value = text;
+    }
+
+    function openLinkedInShowcaseModal() {
+      if (!activeCampaign) {
+        getNewDesign().then(() => {
+          document.getElementById("linkedinModal").classList.add("active");
+        });
+        return;
+      }
+      document.getElementById("linkedinModal").classList.add("active");
+    }
+    function closeLinkedInShowcaseModal() {
+      document.getElementById("linkedinModal").classList.remove("active");
+    }
+
+    function copyLinkedInText() {
+      const text = document.getElementById("linkedinPostText").value;
+      navigator.clipboard.writeText(text);
+      showToast("🚀 LinkedIn Post Copied to Clipboard!");
+    }
+
+    // Chatbot Functions
+    function toggleChatbot(forceState = null) {
+      const win = document.getElementById("chatbotWindow");
+      isChatbotOpen = forceState !== null ? forceState : !isChatbotOpen;
+      if (isChatbotOpen) {
+        win.classList.add("active");
+        setTimeout(() => document.getElementById("chatInput").focus(), 150);
+      } else {
+        win.classList.remove("active");
+      }
+    }
+
+    function quickApplyOverride(instruction) {
+      if (!activeCampaign) {
+        showToast("✨ Generating poster first...");
+        runCreateCampaign().then(() => {
+          toggleChatbot(true);
+          sendChatPrompt(instruction);
+        });
+        return;
+      }
+      toggleChatbot(true);
+      sendChatPrompt(instruction);
+    }
+
+    function sendChatPrompt(promptText) {
+      document.getElementById("chatInput").value = promptText;
+      handleChatSubmit();
+    }
+
+    async function handleChatSubmit(event) {
+      if (event) event.preventDefault();
+      const input = document.getElementById("chatInput");
+      const prompt = input.value.trim();
+      if (!prompt) return;
+
+      input.value = "";
+      const body = document.getElementById("chatBody");
+
+      // Append User message
+      const userDiv = document.createElement("div");
+      userDiv.className = "chat-msg user";
+      userDiv.innerText = prompt;
+      body.appendChild(userDiv);
+
+      const festival = activeCampaign ? activeCampaign.festival : currentFestival;
+      const variantIndex = activeCampaign ? activeCampaign.variantIndex - 1 : 0;
+
+      try {
+        const response = await fetch(API_BASE + "/api/redesign-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt, festival, variantIndex })
+        });
+
+        const data = await response.json();
+        if (data.success && data.campaign) {
+          const botDiv = document.createElement("div");
+          botDiv.className = "chat-msg bot";
+
+          let chipsHtml = "";
+          if (Array.isArray(data.suggestedSections) && data.suggestedSections.length > 0) {
+            chipsHtml = `
+              <div style="margin-top:8px;font-size:0.75rem;color:#94a3b8">💡 Customize another section:</div>
+              <div class="chat-chips-grid">
+                ` + data.suggestedSections.map(s => `<div class="chat-chip-btn" onclick="sendChatPrompt('Change ` + s.replace(/^[^ws]+s*/, '') + `')">` + s + `</div>`).join('') + `
+              </div>`;
+          }
+
+          botDiv.innerHTML = `
+            🎨 <strong>AI Director:</strong> ` + (data.reply || "I have customized your poster! Here is your updated poster. Is there anything else I can help you with?") + `
+            <br/>
+            <small style="color:#d4af37">Theme: ` + data.campaign.themeName + ` | Pattern: ` + (data.campaign.bgPattern || 'default') + `</small>
+            <small style="display:block;margin-top:3px;color:#34d399">🧠 Preference saved to persistent memory</small>
+            ` + chipsHtml + `
+          `;
+          body.appendChild(botDiv);
+
+          displayResult(data.campaign);
+          showToast("✨ Poster updated by AI Director!");
+        } else {
+          const errDiv = document.createElement("div");
+          errDiv.className = "chat-msg bot";
+          errDiv.innerText = "⚠️ " + (data.error || "Could not complete redesign.");
+          body.appendChild(errDiv);
+        }
+      } catch (err) {
+        const errDiv = document.createElement("div");
+        errDiv.className = "chat-msg bot";
+        errDiv.innerText = "⚠️ Network error communicating with AI Director.";
+        body.appendChild(errDiv);
+      }
+
+      body.scrollTop = body.scrollHeight;
+    }
+
+    async function syncPersistentMindStatus() {
+      try {
+        const res = await fetch(API_BASE + "/api/learnings");
+        const data = await res.json();
+        if (data.success && data.data) {
+          const count = (data.data.systemLearnedRules || []).length;
+          document.getElementById("mindStatusText").innerText = `🧠 Persistent Mind: ${count} Rules Active`;
+        }
+      } catch (e) {}
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    // Showcase Gallery Loading
+    function loadGallery() {
+      const featured = [
+        { title: "Diwali Mahotsav", variant: "Radiant Deepams & Molten Gold", url: "/showcase/festival-diwali-var1-1789704240852.jpg" },
+        { title: "Diwali Sapphire", variant: "Midnight Sapphire & Starlight Gold", url: "/showcase/festival-diwali-var2-1789704243005.jpg" },
+        { title: "Ganesh Chaturthi", variant: "Royal Marigold & Auspicious Ganesha", url: "/showcase/ganesh_chaturthi_final.jpg" },
+        { title: "Maha Shivratri", variant: "Cosmic Indigo & Sacred Trishul", url: "/showcase/maha_shivratri_final.jpg" },
+        { title: "Shri Ram Navami", variant: "Ayodhya Royal Saffron & Sun God Gold", url: "/showcase/shri_ram_navami_final.jpg" },
+        { title: "Eid Mubarak", variant: "Imperial Emerald & Islamic Mihrab", url: "/showcase/eid_final.jpg" },
+        { title: "Holi Mahotsav", variant: "Joyful Gulal & Vibrant Colors", url: "/showcase/holi_final.jpg" }
+      ];
+
+      const container = document.getElementById("galleryGrid");
+      container.innerHTML = featured.map(item => `
+        <div class="showcase-card-3d" onclick="openLightbox('${item.url}')">
+          <img src="${item.url}" alt="${item.title}" loading="lazy" />
+          <div class="showcase-info">
+            <div class="showcase-title">${item.title}</div>
+            <div class="showcase-meta">${item.variant}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeLightbox();
+        closePersistentMindModal();
+        closeLinkedInShowcaseModal();
+        toggleChatbot(false);
+      }
+    });
+
+    // Initialize
+    window.addEventListener("DOMContentLoaded", () => {
+      renderFestivalsDeck();
+      init3dCardTilt();
+      loadGallery();
+      syncPersistentMindStatus();
+    });
+  </script>
+</body>
+</html>

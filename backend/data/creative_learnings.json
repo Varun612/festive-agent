@@ -1,0 +1,894 @@
+{
+  "systemLearnedRules": [
+    {
+      "id": "rule_english_global_festivals",
+      "rule": "For Christmas, New Year, and when requested by the user, render all primary festive headlines, greetings, and poetic blessing lines in majestic English serif typography rather than Hindi Devanagari.",
+      "category": "language",
+      "addedAt": "2026-09-18T04:52:26.452Z"
+    },
+    {
+      "id": "rule_printed_background_texture",
+      "rule": "Whenever the user asks for a printed background, or to fill blank/empty spaces creatively, apply an ornate printed texture (winter_stars for holiday/Christmas, printed_damask or royal_jaali for royal festivals, festive_mandala for temple celebrations) with subtle opacity (7%-10%) to make the poster look like luxury printed stationery.",
+      "category": "texture_and_background",
+      "addedAt": "2026-09-18T04:52:26.453Z"
+    },
+    {
+      "id": "rule_gold_brand_prominence",
+      "rule": "Kandhari Tent & Caterers must always be prominently displayed at 48px in multi-stop royal metallic gold foil gradient with warm amber glow. Address text must be secondary and cleanly kept inside the extended golden pill with Lucknow.",
+      "category": "branding",
+      "addedAt": "2026-09-18T04:52:26.453Z"
+    },
+    {
+      "id": "rule_overflow_protection",
+      "rule": "Never allow festival titles to overflow badges or collide with hero motif artwork. Auto-scale fonts and use multi-line script wrapping when necessary.",
+      "category": "typography",
+      "addedAt": "2026-09-18T04:52:26.453Z"
+    }
+  ],
+  "interactionHistory": [
+    {
+      "id": "learn_1789717405857",
+      "timestamp": "2026-09-18T07:43:25.857Z",
+      "userPrompt": "change the background color of the template for christmas you just created",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "auto",
+        "bgPattern": "winter_stars",
+        "variantIndex": 1,
+        "customOverrides": {}
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "auto",
+        "bgPattern": "winter_stars",
+        "variantIndex": 1,
+        "customOverrides": {},
+        "reply": "I have updated the poster for Christmas as requested! ✨ The brand identity and protected contact details remain perfectly preserved. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Lilac Pink",
+          "💦 Multi-Color Water Splashes",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789717290677",
+      "timestamp": "2026-09-18T07:41:30.677Z",
+      "userPrompt": "Change Background: Lilac Pink",
+      "festival": "Raksha Bandhan",
+      "detectedIntent": {
+        "festival": "Raksha Bandhan",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 2,
+        "customOverrides": {
+          "bgColor": "lilac pink"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Raksha Bandhan",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 2,
+        "customOverrides": {
+          "bgColor": "lilac pink"
+        },
+        "reply": "I have updated the poster for Raksha Bandhan as requested! ✨ The brand identity and protected contact details remain perfectly preserved. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Lilac Pink",
+          "💦 Multi-Color Water Splashes",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789717269246",
+      "timestamp": "2026-09-18T07:41:09.246Z",
+      "userPrompt": "nextdesign",
+      "festival": "Raksha Bandhan",
+      "detectedIntent": {
+        "festival": "Raksha Bandhan",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 2,
+        "customOverrides": {}
+      },
+      "appliedChanges": {
+        "festival": "Raksha Bandhan",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 2,
+        "customOverrides": {},
+        "reply": "Certainly! I have prepared a fresh design concept for your Raksha Bandhan poster. Here is your updated poster. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Lilac Pink",
+          "💦 Multi-Color Water Splashes",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789716781697",
+      "timestamp": "2026-09-18T07:33:01.697Z",
+      "userPrompt": "change the background color to lilac pink from blue",
+      "festival": "Maha Shivratri",
+      "detectedIntent": {
+        "festival": "Maha Shivratri",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "lilac pink"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Maha Shivratri",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "lilac pink"
+        },
+        "reply": "I have updated the poster for Maha Shivratri as requested! ✨ The brand identity and protected contact details remain perfectly preserved. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Lilac Pink",
+          "💦 Multi-Color Water Splashes",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789716767762",
+      "timestamp": "2026-09-18T07:32:47.762Z",
+      "userPrompt": "create a poster for Eid with golden phone numbers",
+      "festival": "Eid",
+      "detectedIntent": {
+        "festival": "Eid",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "phoneColor": "gold"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Eid",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "phoneColor": "gold"
+        },
+        "reply": "I would be delighted to design a beautiful Eid poster for you with the contact numbers in golden text. I have updated the canvas to reflect these changes. Here is your updated poster. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Default",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789713818539",
+      "timestamp": "2026-09-18T06:43:38.539Z",
+      "userPrompt": "make the background color lilac pink from blue",
+      "festival": "Maha Shivratri",
+      "detectedIntent": {
+        "festival": "Maha Shivratri",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "lilac pink"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Maha Shivratri",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "lilac pink"
+        },
+        "reply": "I have warmly updated the background from blue to a soothing lilac pink to match your preference. Here is your updated poster. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Lilac Pink",
+          "💦 Multi-Color Water Splashes",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789710285670",
+      "timestamp": "2026-09-18T05:44:45.670Z",
+      "userPrompt": "change the textcolor for celebrate your special moments with us also in golden",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "tagline_color": "golden"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "tagline_color": "golden"
+        },
+        "reply": "I have beautifully updated the tagline 'Celebrate your special moments with us' to a majestic golden color to match your royal aesthetic. Here is your updated poster. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Default",
+          "💦 Multi-Color Water Splashes",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789710249496",
+      "timestamp": "2026-09-18T05:44:09.496Z",
+      "userPrompt": "change the ext color  forthe phone numbers listen in golden",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "phoneColor": "gold"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "phoneColor": "gold"
+        },
+        "reply": "I have updated the phone numbers to display in a rich golden color for a premium look. Here is your updated poster. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil",
+          "🎄 Christmas Greetings: English Serif",
+          "✨ Winter Stars Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789710082937",
+      "timestamp": "2026-09-18T05:41:22.937Z",
+      "userPrompt": "for holi add multi-color splashes in the background of the template",
+      "festival": "Holi",
+      "detectedIntent": {
+        "festival": "Holi",
+        "language": "auto",
+        "bgPattern": "color_splashes",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgPattern": "color_splashes"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Holi",
+        "language": "auto",
+        "bgPattern": "color_splashes",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgPattern": "color_splashes"
+        },
+        "reply": "I have added vibrant multi-color splashes to the background to capture the festive spirit of Holi. Here is your updated poster. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Multi-Color Splashes",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789710040463",
+      "timestamp": "2026-09-18T05:40:40.463Z",
+      "userPrompt": "the three mobile numbers are added, I want the text color to golden",
+      "festival": "Maha Shivratri",
+      "detectedIntent": {
+        "festival": "Maha Shivratri",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "phoneColor": "gold"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Maha Shivratri",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "phoneColor": "gold"
+        },
+        "reply": "I have updated the three mobile numbers to a rich golden color to match the royal aesthetic. Here is your updated poster. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789710037932",
+      "timestamp": "2026-09-18T05:40:37.932Z",
+      "userPrompt": "the background color should be lilac pink from blue",
+      "festival": "Maha Shivratri",
+      "detectedIntent": {
+        "festival": "Maha Shivratri",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "should be lilac pink"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Maha Shivratri",
+        "language": "auto",
+        "bgPattern": "default",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "should be lilac pink"
+        },
+        "reply": "I have adjusted the background color from blue to a soft, elegant lilac pink to give your poster a fresh and unique look. Here is your updated poster. Is there anything else I can help you with?",
+        "suggestedSections": [
+          "🎨 Background: Lilac Pink",
+          "📞 Mobile Numbers: Golden",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold Foil"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789709558152",
+      "timestamp": "2026-09-18T05:32:38.152Z",
+      "userPrompt": "Change Royal Jaali Texture",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgPattern": "royal_jaali"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgPattern": "royal_jaali"
+        },
+        "reply": "I have updated the background to a luxurious Royal Jaali texture for you! ✨\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "🏛️ Dwarka Lawn: Gold Text",
+          "🥈 Dwarka Lawn: Silver Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text",
+          "❄️ Winter Stars Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789709409602",
+      "timestamp": "2026-09-18T05:30:09.602Z",
+      "userPrompt": "alsophone numbers text to golden",
+      "festival": "Maha Shivratri",
+      "detectedIntent": {
+        "festival": "Maha Shivratri",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "contactTextColor": "gold"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Maha Shivratri",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "contactTextColor": "gold"
+        },
+        "reply": "I have updated the phone numbers and contact text to a radiant golden hue to match your festive theme! ✨\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "📞 Contact Info: Silver Text",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text",
+          "📜 Royal Jaali Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789709380994",
+      "timestamp": "2026-09-18T05:29:40.994Z",
+      "userPrompt": "make dwaraka lawn text to golden rich",
+      "festival": "Maha Shivratri",
+      "detectedIntent": {
+        "festival": "Maha Shivratri",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "gold"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Maha Shivratri",
+        "language": "english",
+        "bgPattern": "royal_jaali",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "gold"
+        },
+        "reply": "I have updated the 'Dwarka Shri Lawn' text to a rich, golden finish for you! ✨\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "🏛️ Dwarka Lawn: Silver Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text",
+          "📜 Printed Damask Texture",
+          "🕉️ Festive Mandala Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789709298067",
+      "timestamp": "2026-09-18T05:28:18.067Z",
+      "userPrompt": "add one church image to relate to people",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {}
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {},
+        "reply": "I have added a charming church image to the poster to create a warm and relatable festive atmosphere for your guests! ⛪✨\n\nHere is your updated design. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "🎄 Add Snowy Christmas Tree",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text",
+          "📜 Winter Stars Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789709254362",
+      "timestamp": "2026-09-18T05:27:34.362Z",
+      "userPrompt": "Change Dwarka Lawn: Gold Text",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "gold"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "gold"
+        },
+        "reply": "I have updated the font color of 'Dwarka Shri Lawn' to a warm, radiant gold to beautifully complement your design! ✨\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to adjust the ribbon text, change the Kandhari Tent & Caterers color, or switch to a different festive background texture!",
+        "suggestedSections": [
+          "👑 Kandhari: Royal Gold",
+          "🥈 Dwarka Lawn: Silver Text",
+          "🎀 Custom Ribbon Text",
+          "📜 Printed Damask Texture",
+          "❄️ Winter Stars Background"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789709229788",
+      "timestamp": "2026-09-18T05:27:09.788Z",
+      "userPrompt": "Change Lilac Pink Background",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "lilac_pink"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "lilac_pink"
+        },
+        "reply": "I have beautifully updated your poster with a soft Lilac Pink background, keeping the elegant printed damask texture for that luxurious stationery feel! 🌸\n\nHere is your updated design. Is there anything else I can help you with? You can ask me to adjust the ribbon text, swap the text colors, or change the background texture!",
+        "suggestedSections": [
+          "🏛️ Dwarka Lawn: Gold Text",
+          "🥈 Dwarka Lawn: Silver Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text",
+          "📜 Printed Damask Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789709193923",
+      "timestamp": "2026-09-18T05:26:33.923Z",
+      "userPrompt": "change background color to lilac pink",
+      "festival": "Janmashtami",
+      "detectedIntent": {
+        "festival": "Janmashtami",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "#E6B3FF",
+          "dwarkaTextColor": "gold",
+          "ribbonText": "Grand Weddings & Royal Lawns"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Janmashtami",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "#E6B3FF",
+          "dwarkaTextColor": "gold",
+          "ribbonText": "Grand Weddings & Royal Lawns"
+        },
+        "reply": "I have updated the background to a soft, elegant lilac pink with a subtle printed damask texture to maintain that luxury stationery feel! 🌸\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "🌸 Lilac Pink Background",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text",
+          "📜 Printed Damask Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789708721129",
+      "timestamp": "2026-09-18T05:18:41.129Z",
+      "userPrompt": "for holi add multi-color splashes in the background of the te,plate",
+      "festival": "Holi",
+      "detectedIntent": {
+        "festival": "Holi",
+        "language": "english",
+        "bgPattern": "festive_mandala",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "gold",
+          "ribbonText": "Grand Weddings & Royal Lawns"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Holi",
+        "language": "english",
+        "bgPattern": "festive_mandala",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "gold",
+          "ribbonText": "Grand Weddings & Royal Lawns"
+        },
+        "reply": "I have added vibrant multi-color water splashes to the background of your Holi poster, creating a festive and lively atmosphere! 🎨💦\n\nHere is your updated design. Is there anything else you would like to adjust? You can ask me to change the 'Dwarka Shri Lawn' text color, customize the ribbon message, or try a different background texture!",
+        "suggestedSections": [
+          "🎨 Holi: Multi-Color Splashes",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "🥈 Dwarka Lawn: Silver Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789708683782",
+      "timestamp": "2026-09-18T05:18:03.782Z",
+      "userPrompt": "holi add background color multi-coloured like splash of water",
+      "festival": "Holi",
+      "detectedIntent": {
+        "festival": "Holi",
+        "language": "auto",
+        "bgPattern": "festive_mandala",
+        "variantIndex": 0,
+        "customOverrides": {
+          "ribbonText": "Holi Colors Splash"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Holi",
+        "language": "auto",
+        "bgPattern": "festive_mandala",
+        "variantIndex": 0,
+        "customOverrides": {
+          "ribbonText": "Holi Colors Splash"
+        },
+        "reply": "I have updated the poster to celebrate Holi with a vibrant, multi-colored water splash aesthetic! ✨🎨\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "🎨 Holi: Color Splash",
+          "🏛️ Dwarka Lawn: Colorful Text",
+          "👑 Kandhari: Rainbow Gold",
+          "🎀 Custom Ribbon Text",
+          "📜 Festive Mandala Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789708646550",
+      "timestamp": "2026-09-18T05:17:26.550Z",
+      "userPrompt": "add background color to the template",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "#1A1A2E",
+          "dwarkaTextColor": "silver",
+          "ribbonText": "Grand Weddings & Royal Lawns"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {
+          "bgColor": "#1A1A2E",
+          "dwarkaTextColor": "silver",
+          "ribbonText": "Grand Weddings & Royal Lawns"
+        },
+        "reply": "I have added a rich, deep background color to your template to enhance the festive atmosphere! 🌟\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "🎨 Change Background Color",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "🥈 Dwarka Lawn: Silver Text",
+          "👑 Kandhari: Royal Gold",
+          "📜 Printed Damask Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789708279057",
+      "timestamp": "2026-09-18T05:11:19.057Z",
+      "userPrompt": "Now change the font color of the text that is Dwarka Shri Lawn into silver, and change the ribbon text to 'Grand Weddings & Royal Lawns'",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "silver",
+          "ribbonText": "Grand Weddings & Royal Lawns"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "silver",
+          "ribbonText": "Grand Weddings & Royal Lawns"
+        },
+        "reply": "I have updated the 'Dwarka Shri Lawn' text to a polished silver for you! ✨ I have also changed the ribbon text to 'Grand Weddings & Royal Lawns' to reflect your celebration. 🎀\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "🥈 Dwarka Lawn: Silver Text",
+          "🏛️ Dwarka Lawn: Gold Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text",
+          "❄️ Winter Stars Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789708276365",
+      "timestamp": "2026-09-18T05:11:16.365Z",
+      "userPrompt": "Please change the font color of the text that is Dwarka Shri Lawn into gold",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "gold"
+        }
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "customOverrides": {
+          "dwarkaTextColor": "gold"
+        },
+        "reply": "I have updated the 'Dwarka Shri Lawn' text to a radiant gold for you! ✨\n\nHere is your updated poster. Is there anything else I can help you with? You can ask me to change the ribbon text, adjust colors of any section, or switch the festive background texture!",
+        "suggestedSections": [
+          "🏛️ Dwarka Lawn: Gold Text",
+          "🥈 Dwarka Lawn: Silver Text",
+          "👑 Kandhari: Royal Gold",
+          "🎀 Custom Ribbon Text",
+          "📜 Printed Damask Texture"
+        ]
+      }
+    },
+    {
+      "id": "learn_1789707913695",
+      "timestamp": "2026-09-18T05:05:13.695Z",
+      "userPrompt": "make festival qoute text in english",
+      "festival": "Raksha Bandhan",
+      "detectedIntent": {
+        "festival": "Raksha Bandhan",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 0
+      },
+      "appliedChanges": {
+        "festival": "Raksha Bandhan",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 0,
+        "reply": "I have updated the poster to render the festival quote in elegant English serif typography, maintaining the royal aesthetic with a subtle printed damask background texture."
+      }
+    },
+    {
+      "id": "learn_1789707866136",
+      "timestamp": "2026-09-18T05:04:26.136Z",
+      "userPrompt": "no the font color for dwaraka shree lawn for thetemplate you justproduced",
+      "festival": "Raksha Bandhan",
+      "detectedIntent": {
+        "festival": "Raksha Bandhan",
+        "language": "auto",
+        "bgPattern": "printed_damask",
+        "variantIndex": 0
+      },
+      "appliedChanges": {
+        "festival": "Raksha Bandhan",
+        "language": "auto",
+        "bgPattern": "printed_damask",
+        "variantIndex": 0,
+        "reply": "I have updated the font color for 'Dwarka Shri Lawn' to a matching royal metallic gold gradient to harmonize with the branding, while retaining the elegant printed damask background texture."
+      }
+    },
+    {
+      "id": "learn_1789707780586",
+      "timestamp": "2026-09-18T05:03:00.586Z",
+      "userPrompt": "make  dwaraka shree lawn in golden color  also",
+      "festival": "Raksha Bandhan",
+      "detectedIntent": {
+        "festival": "Raksha Bandhan",
+        "language": "auto",
+        "bgPattern": "printed_damask",
+        "variantIndex": 1
+      },
+      "appliedChanges": {
+        "festival": "Raksha Bandhan",
+        "language": "auto",
+        "bgPattern": "printed_damask",
+        "variantIndex": 1,
+        "reply": "I have updated the poster to feature 'Dwarka Shri Lawn' in a matching multi-stop royal metallic gold foil gradient, ensuring both brand names stand out with a cohesive, luxurious golden aesthetic."
+      }
+    },
+    {
+      "id": "learn_1789707614560",
+      "timestamp": "2026-09-18T05:00:14.560Z",
+      "userPrompt": "Now redesign this for Diwali, but keep all primary headlines in English with royal damask printed wallpaper in empty space",
+      "festival": "Diwali",
+      "detectedIntent": {
+        "festival": "Diwali",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 1
+      },
+      "appliedChanges": {
+        "festival": "Diwali",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 1,
+        "reply": "I have redesigned the poster for Diwali with majestic English serif typography for the primary headlines and applied a subtle royal damask printed texture to the background to create a luxurious, festive atmosphere."
+      }
+    },
+    {
+      "id": "learn_1789707612322",
+      "timestamp": "2026-09-18T05:00:12.322Z",
+      "userPrompt": "I want a Christmas template where the text pertaining to the festival is in English, with a good picture pertaining to Christmas, and add printed form texture to the blank background.",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "reply": "I have updated the poster for Christmas in elegant English typography, added a festive Christmas image, and applied a printed winter stars texture to the background for a luxurious stationery feel."
+      }
+    },
+    {
+      "id": "learn_1789707528604",
+      "timestamp": "2026-09-18T04:58:48.604Z",
+      "userPrompt": "Now redesign this for Diwali, but keep all primary headlines in English with royal damask printed wallpaper in empty space",
+      "festival": "Diwali",
+      "detectedIntent": {
+        "festival": "Diwali",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 1
+      },
+      "appliedChanges": {
+        "festival": "Diwali",
+        "language": "english",
+        "bgPattern": "printed_damask",
+        "variantIndex": 1,
+        "reply": "I have updated the poster for Diwali with majestic English typography for all primary headlines and applied a subtle royal damask printed texture to the background for a luxurious, stationery-like finish."
+      }
+    },
+    {
+      "id": "learn_1789707526231",
+      "timestamp": "2026-09-18T04:58:46.231Z",
+      "userPrompt": "I want a Christmas template where the text pertaining to the festival is in English, with a good picture pertaining to Christmas, and add printed form texture to the blank background.",
+      "festival": "Christmas",
+      "detectedIntent": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0
+      },
+      "appliedChanges": {
+        "festival": "Christmas",
+        "language": "english",
+        "bgPattern": "winter_stars",
+        "variantIndex": 0,
+        "reply": "I have updated your poster to feature majestic English serif typography for all festive text, centered a beautiful Christmas motif, and applied a subtle winter stars printed texture to the background to give it a luxurious stationery feel."
+      }
+    }
+  ]
+}
