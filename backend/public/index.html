@@ -1786,19 +1786,28 @@
       setTimeout(() => { setStep(2, "done"); setStep(3, "working"); }, 2200);
       setTimeout(() => { setStep(3, "done"); setStep(4, "working"); }, 3600);
 
-      const formData = new FormData();
-      formData.append("festival", festival);
-      if (preferredVariant !== null) {
-        formData.append("variant", preferredVariant);
+      let fetchOptions;
+      if (refFile || busFile) {
+        const formData = new FormData();
+        formData.append("festival", festival);
+        if (preferredVariant !== null) formData.append("variant", preferredVariant);
+        if (refFile) formData.append("referenceCreative", refFile);
+        if (busFile) formData.append("businessCard", busFile);
+        fetchOptions = { method: "POST", body: formData };
+      } else {
+        fetchOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            festival,
+            variant: preferredVariant !== null ? preferredVariant : undefined,
+            language: "auto",
+          }),
+        };
       }
-      if (refFile) formData.append("referenceCreative", refFile);
-      if (busFile) formData.append("businessCard", busFile);
 
       try {
-        const response = await fetch(API_BASE + "/api/create-campaign", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(API_BASE + "/api/create-campaign", fetchOptions);
 
         const contentType = response.headers.get("content-type") || "";
         let data;

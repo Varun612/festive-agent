@@ -19,11 +19,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Enable CORS for decoupled frontend
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,7 +29,29 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 app.use("/generated", express.static(path.join(__dirname, "public", "generated")));
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({
+  dest: path.join(__dirname, "uploads"),
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
+
+const handleUpload = (req, res, next) => {
+  const contentType = req.headers["content-type"] || "";
+  if (!contentType.includes("multipart/form-data")) {
+    return next();
+  }
+  upload.fields([
+    { name: "referenceCreative", maxCount: 1 },
+    { name: "businessCard", maxCount: 1 },
+  ])(req, res, (err) => {
+    if (err) {
+      console.warn("Multer upload note:", err.message);
+      req.files = req.files || {};
+      req.body = req.body || {};
+      return next();
+    }
+    next();
+  });
+};
 
 // Serve frontend main page on root
 app.get("/", (req, res) => {
@@ -109,10 +127,7 @@ app.get("/api/gallery", (req, res) => {
 // Create campaign
 app.post(
   "/api/create-campaign",
-  upload.fields([
-    { name: "referenceCreative", maxCount: 1 },
-    { name: "businessCard", maxCount: 1 },
-  ]),
+  handleUpload,
   async (req, res) => {
     try {
       const body = req.body || {};
@@ -266,6 +281,20 @@ async function startServer() {
   } catch (e) {
     console.warn("Seed/migration:", e.message);
   }
+
+  // 404 JSON fallback
+  app.use((req, res) => {
+    res.status(404).json({ success: false, error: `Endpoint not found: ${req.method} ${req.originalUrl}` });
+  });
+
+  // Global JSON error handler
+  app.use((err, req, res, next) => {
+    console.error("Express error handler:", err);
+    res.status(err.status || 500).json({
+      success: false,
+      error: err.message || "Internal server error occurred.",
+    });
+  });
 
   app.listen(PORT, () => {
     console.log("");
