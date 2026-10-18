@@ -1800,7 +1800,16 @@
           body: formData,
         });
 
-        const data = await response.json();
+        const contentType = response.headers.get("content-type") || "";
+        let data;
+        if (contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          const text = await response.text();
+          console.warn("Non-JSON server response:", text.slice(0, 100));
+          throw new Error("AI Studio backend service unavailable. Please check your connection.");
+        }
+
         if (!response.ok || !data.success) {
           throw new Error(data.error || "Failed to generate campaign");
         }
@@ -1814,7 +1823,8 @@
         }, 500);
 
       } catch (err) {
-        alert("Agent Error: " + err.message);
+        console.error("Agent Error:", err);
+        showToast("⚠️ " + (err.message || "Unable to generate campaign. Please retry."));
         stepper.classList.remove("active");
       } finally {
         if (genBtn) genBtn.disabled = false;
@@ -1912,6 +1922,8 @@
 
     // LINKEDIN SHOWCASE SUITE
     function prepareLinkedInPost(campaign) {
+      const festName = (campaign && campaign.festival) ? campaign.festival : (currentFestival || "Diwali");
+      const theme = (campaign && campaign.themeName) ? ` (${campaign.themeName})` : "";
       const text = `🚀 Excited to showcase FestiveAgent AI — an Autonomous 3D Multi-Agent Creative Director built for luxury hospitality & event venues!
 
 🎯 The Challenge:
@@ -1927,22 +1939,32 @@ Creating branded festival promotional posters typically leads to style drift, le
 4. Multimodal Vision & Vector Compositing:
    Groq Qwen Vision + Sharp vector pipeline yields production-ready 1085×1449 assets in under 3 seconds!
 
-👉 Active Showcase Poster: ${campaign.festival} (${campaign.themeName})
+👉 Active Showcase Poster: ${festName}${theme}
 💬 Feedback & thoughts welcome!
 
 #ArtificialIntelligence #GenAI #AgenticAI #MachineLearning #WebDevelopment #JavaScript #FullStack #SoftwareEngineering #PortfolioShowcase`;
 
-      document.getElementById("linkedinPostText").value = text;
+      const postTextEl = document.getElementById("linkedinPostText");
+      if (postTextEl) postTextEl.value = text;
     }
 
     function openLinkedInShowcaseModal() {
-      if (!activeCampaign) {
-        getNewDesign().then(() => {
-          document.getElementById("linkedinModal").classList.add("active");
-        });
-        return;
+      prepareLinkedInPost(activeCampaign);
+
+      const posterImg = document.getElementById("posterImg");
+      const currentImgSrc = (activeCampaign && activeCampaign.imageUrl) 
+        ? ((activeCampaign.imageUrl.startsWith("http") ? "" : API_BASE) + activeCampaign.imageUrl)
+        : (posterImg && posterImg.src ? posterImg.src : (API_BASE + "/assets/motifs/diwali.jpg"));
+
+      const downloadBtn = document.getElementById("linkedinDownloadPosterBtn");
+      if (downloadBtn) {
+        downloadBtn.href = currentImgSrc;
+        const festSlug = (activeCampaign ? activeCampaign.festival : currentFestival || 'festival').toLowerCase().replace(/\s+/g, '-');
+        downloadBtn.setAttribute("download", `${festSlug}-showcase-poster.jpg`);
       }
-      document.getElementById("linkedinModal").classList.add("active");
+
+      const modal = document.getElementById("linkedinModal");
+      if (modal) modal.classList.add("active");
     }
     function closeLinkedInShowcaseModal() {
       document.getElementById("linkedinModal").classList.remove("active");
