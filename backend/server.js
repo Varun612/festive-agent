@@ -26,6 +26,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Serve public static assets (HTML UI, generated images, motif artwork)
 app.use(express.static(path.join(__dirname, "public")));
@@ -114,13 +115,11 @@ app.post(
   ]),
   async (req, res) => {
     try {
-      const { festival, variant, language, bgPattern } = req.body || {};
-
-      if (!festival) {
-        return res.status(400).json({
-          error: "Festival name is required.",
-        });
-      }
+      const body = req.body || {};
+      const festival = body.festival || "Diwali";
+      const variant = body.variant !== undefined ? body.variant : undefined;
+      const language = body.language || "auto";
+      const bgPattern = body.bgPattern || null;
 
       const referenceCreative =
         req.files && req.files.referenceCreative
@@ -156,22 +155,26 @@ app.post(
         const Campaign = require("./models/Campaign");
         const mongoose = require("mongoose");
         if (mongoose.connection.readyState === 1) {
-          Campaign.create({
+          const imageFilename = path.basename(campaign.imageUrl || "") || `${festival.toLowerCase().replace(/\s+/g, '-')}-poster.jpg`;
+          await Campaign.create({
             festival,
             variantIndex: campaign.variantIndex || 0,
-            variantName: campaign.variantName || "",
-            imageFilename: campaign.posterFile || "",
-            imageUrl: campaign.posterUrl || "",
+            variantName: campaign.themeName || campaign.variantName || "",
+            imageFilename: imageFilename,
+            imageUrl: campaign.imageUrl || "",
             language: language || "auto",
             bgPattern: bgPattern || null,
             metadata: {
-              headline: campaign.headline || "",
+              headline: campaign.caption || "",
               blessingLine: campaign.blessingLine || "",
               topRightText: campaign.topRightText || "",
             },
-          }).catch((e) => console.warn("Campaign save to Mongo:", e.message));
+          });
+          console.log(`💾 Saved campaign '${festival}' to MongoDB!`);
         }
-      } catch (e) { /* no-op */ }
+      } catch (e) {
+        console.warn("Campaign save to Mongo:", e.message);
+      }
 
       res.json({ success: true, campaign });
     } catch (error) {
@@ -187,7 +190,10 @@ app.post(
 // Redesign chat
 app.post("/api/redesign-chat", async (req, res) => {
   try {
-    const { prompt, festival, variantIndex } = req.body || {};
+    const body = req.body || {};
+    const prompt = body.prompt;
+    const festival = body.festival || "Diwali";
+    const variantIndex = body.variantIndex;
     if (!prompt) {
       return res.status(400).json({
         success: false,
