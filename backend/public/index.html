@@ -1664,10 +1664,19 @@
   <!-- Native JavaScript -->
   <script>
 
-    // Dynamic API Base URL resolution: auto-connects port 3000 -> 5000, and works on 5000 natively
-    const API_BASE = (window.location.port === '3000' || (window.location.port !== '5000' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))) 
-      ? 'http://localhost:5000' 
-      : '';
+    // Dynamic API Base URL resolution:
+    // Auto-connects localhost:3000 -> 5000; works natively on 5000/tunnel; routes Vercel to live AI backend!
+    const CLOUD_BACKEND_URL = 'https://human-shoes-tough-findings.trycloudflare.com';
+
+    let API_BASE = '';
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      API_BASE = (window.location.port === '3000') ? 'http://localhost:5000' : '';
+    } else if (window.location.hostname.endsWith('trycloudflare.com') || window.location.hostname.endsWith('lhr.life') || window.location.hostname.endsWith('loca.lt')) {
+      API_BASE = '';
+    } else {
+      // Deployed on Vercel (festive-agent.vercel.app), Netlify, etc.
+      API_BASE = localStorage.getItem('FESTIVE_API_BASE') || CLOUD_BACKEND_URL;
+    }
   
     // Complete Festival Profiles with Real AI Motif Art
     const FESTIVAL_DECK = [
@@ -1888,9 +1897,11 @@
     // Modal Handlers
     function openLightbox(url = null) {
       let img = url || (activeCampaign ? activeCampaign.imageUrl : null);
-      if (img && !img.startsWith("http")) img = API_BASE + img;
+      if (img && !img.startsWith("http") && API_BASE) img = API_BASE + img;
       if (!img) return;
       document.getElementById("lightboxImg").src = img;
+      const dlBtn = document.getElementById("lightboxDownloadBtn");
+      if (dlBtn) dlBtn.href = img;
       document.getElementById("lightboxModal").classList.add("active");
     }
     function closeLightbox() {
@@ -1899,27 +1910,38 @@
 
     async function openPersistentMindModal() {
       const modal = document.getElementById("mindModal");
-      modal.classList.add("active");
+      if (modal) modal.classList.add("active");
 
       try {
         const res = await fetch(API_BASE + "/api/learnings");
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          console.warn("Learnings endpoint returned non-JSON response");
+          return;
+        }
         const json = await res.json();
         if (json.success && json.data) {
           const rules = json.data.systemLearnedRules || [];
-          document.getElementById("mindRulesList").innerHTML = rules.map((r, i) => `
-            <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px; padding: 10px 14px;">
-              <span style="color: var(--gold-light); font-weight: 800; font-size: 11.5px; text-transform: uppercase;">[${r.category}]</span>
-              <p style="color: #ffffff; font-size: 13px; margin-top: 3px;">${r.rule}</p>
-            </div>
-          `).join('');
+          const rulesList = document.getElementById("mindRulesList");
+          if (rulesList) {
+            rulesList.innerHTML = rules.map((r, i) => `
+              <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.25); border-radius: 8px; padding: 10px 14px;">
+                <span style="color: var(--gold-light); font-weight: 800; font-size: 11.5px; text-transform: uppercase;">[${r.category}]</span>
+                <p style="color: #ffffff; font-size: 13px; margin-top: 3px;">${r.rule}</p>
+              </div>
+            `).join('');
+          }
 
           const history = json.data.interactionHistory || [];
-          document.getElementById("mindHistoryList").innerHTML = history.slice(0, 10).map(h => `
-            <div style="background: rgba(0,0,0,0.4); border-left: 2px solid #6366f1; padding: 8px 12px; font-size: 12px;">
-              <span style="color: #94a3b8;">"${h.userPrompt}"</span> &rarr;
-              <span style="color: #34d399; font-weight: 700;">${h.festival || 'Festival'}</span>
-            </div>
-          `).join('');
+          const histList = document.getElementById("mindHistoryList");
+          if (histList) {
+            histList.innerHTML = history.slice(0, 10).map(h => `
+              <div style="background: rgba(0,0,0,0.4); border-left: 2px solid #6366f1; padding: 8px 12px; font-size: 12px;">
+                <span style="color: #94a3b8;">"${h.userPrompt}"</span> &rarr;
+                <span style="color: #34d399; font-weight: 700;">${h.festival || 'Festival'}</span>
+              </div>
+            `).join('');
+          }
         }
       } catch (e) {
         console.warn("Could not load learnings:", e);
@@ -2040,7 +2062,13 @@ Creating branded festival promotional posters typically leads to style drift, le
           body: JSON.stringify({ prompt, festival, variantIndex })
         });
 
-        const data = await response.json();
+        const contentType = response.headers.get("content-type") || "";
+        let data;
+        if (contentType.includes("application/json")) {
+          data = await response.json();
+        } else {
+          throw new Error("AI Studio backend service unavailable. Please retry shortly.");
+        }
         if (data.success && data.campaign) {
           const botDiv = document.createElement("div");
           botDiv.className = "chat-msg bot";
@@ -2084,10 +2112,13 @@ Creating branded festival promotional posters typically leads to style drift, le
     async function syncPersistentMindStatus() {
       try {
         const res = await fetch(API_BASE + "/api/learnings");
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) return;
         const data = await res.json();
         if (data.success && data.data) {
           const count = (data.data.systemLearnedRules || []).length;
-          document.getElementById("mindStatusText").innerText = `🧠 Persistent Mind: ${count} Rules Active`;
+          const statusEl = document.getElementById("mindStatusText");
+          if (statusEl) statusEl.innerText = `🧠 Persistent Mind: ${count} Rules Active`;
         }
       } catch (e) {}
     }
@@ -2112,15 +2143,19 @@ Creating branded festival promotional posters typically leads to style drift, le
       ];
 
       const container = document.getElementById("galleryGrid");
-      container.innerHTML = featured.map(item => `
-        <div class="showcase-card-3d" onclick="openLightbox('${item.url}')">
-          <img src="${item.url}" alt="${item.title}" loading="lazy" />
+      if (!container) return;
+      container.innerHTML = featured.map(item => {
+        const fullUrl = (API_BASE && !item.url.startsWith("http")) ? (API_BASE + item.url) : item.url;
+        return `
+        <div class="showcase-card-3d" onclick="openLightbox('${fullUrl}')">
+          <img src="${fullUrl}" alt="${item.title}" loading="lazy" onerror="if(this.src !== window.location.origin + '${item.url}'){this.src='${item.url}';}" />
           <div class="showcase-info">
             <div class="showcase-title">${item.title}</div>
             <div class="showcase-meta">${item.variant}</div>
           </div>
         </div>
-      `).join("");
+      `;
+      }).join("");
     }
 
     // Keyboard Shortcuts

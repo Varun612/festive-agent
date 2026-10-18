@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://human-shoes-tough-findings.trycloudflare.com/api/:path*"
+    },
+    {
+      "source": "/generated/:path*",
+      "destination": "https://human-shoes-tough-findings.trycloudflare.com/generated/:path*"
+    },
+    {
+      "source": "/showcase/:path*",
+      "destination": "https://human-shoes-tough-findings.trycloudflare.com/showcase/:path*"
+    }
+  ]
+}

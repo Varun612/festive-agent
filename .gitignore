@@ -32,3 +32,6 @@ build/
 Thumbs.db
 .vscode/
 .idea/
+
+# Binaries
+cloudflared.exe
