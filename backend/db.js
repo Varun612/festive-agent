@@ -8,14 +8,17 @@ async function connectDB() {
   if (isConnected) return;
 
   try {
-    const conn = await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 1500,
-      connectTimeoutMS: 1500,
-    });
+    const conn = await Promise.race([
+      mongoose.connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 1500,
+        connectTimeoutMS: 1500,
+      }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("Connection timed out after 1.5s")), 1500))
+    ]);
     isConnected = true;
     console.log(`✅ MongoDB connected: ${conn.connection.host}/${conn.connection.name}`);
   } catch (err) {
-    console.warn(`⚠️  MongoDB local service offline (${err.message}). Using persistent file storage mode (data/creative_learnings.json).`);
+    console.warn(`⚠️  MongoDB service offline (${err.message}). Using persistent file storage mode (data/creative_learnings.json).`);
   }
 }
 

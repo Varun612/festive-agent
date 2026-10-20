@@ -2501,7 +2501,7 @@ async function compositeFestivalCreative({ festivalData, profile, variant, varia
   }
 
   // PURE CLEAN CANVAS: Base is created from scratch with pure background color
-  await sharp({
+  const buffer = await sharp({
     create: {
       width,
       height,
@@ -2511,9 +2511,20 @@ async function compositeFestivalCreative({ festivalData, profile, variant, varia
   })
     .composite(layers)
     .jpeg({ quality: 96 })
-    .toFile(outputFile);
+    .toBuffer();
 
-  return `/generated/${path.basename(outputFile)}`;
+  try {
+    fs.writeFileSync(outputFile, buffer);
+  } catch (err) {
+    console.warn("Filesystem write warning (cloud ephemeral mode):", err.message);
+  }
+
+  const imageDataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+
+  return {
+    imageUrl: `/generated/${path.basename(outputFile)}`,
+    imageDataUrl,
+  };
 }
 
 /**
@@ -2588,7 +2599,7 @@ async function analyzeBrandAndCreateCampaign({
   });
 
   console.log(`🎨 Compositing dynamic festival creative with printed texture...`);
-  const imageUrl = await compositeFestivalCreative({
+  const { imageUrl, imageDataUrl } = await compositeFestivalCreative({
     festivalData,
     profile,
     variant,
@@ -2601,6 +2612,7 @@ async function analyzeBrandAndCreateCampaign({
 
   return {
     imageUrl,
+    imageDataUrl,
     caption: festivalData.caption,
     hashtags: festivalData.hashtags.slice(0, 5),
     festival: festivalData.festival_name,

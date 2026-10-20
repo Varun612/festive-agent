@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: festive-agent-api
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: HF_TOKEN
+        sync: false
+      - key: FRONTEND_URL
+        value: https://festive-agent.vercel.app
+      - key: MONGODB_URI
+        sync: false

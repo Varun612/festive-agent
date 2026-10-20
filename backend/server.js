@@ -16,7 +16,22 @@ const {
 } = require("./agent");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+
+// Safe dynamic port resolution — strictly excludes 3000 and 5000
+let portConfig = {};
+try {
+  const cfgPath = path.join(__dirname, "..", "port_config.json");
+  if (fs.existsSync(cfgPath)) {
+    portConfig = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
+  }
+} catch (e) {}
+
+let rawPort = parseInt(process.env.PORT || portConfig.backendPort || 5001, 10);
+if (rawPort === 5000 || rawPort === 3000) {
+  console.warn(`⚠️ Port ${rawPort} is reserved for other projects! Safely redirecting to port 5001.`);
+  rawPort = 5001;
+}
+const PORT = rawPort;
 
 // Enable CORS for decoupled frontend
 app.use(cors());
@@ -64,7 +79,9 @@ app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     server: "FestiveAgent AI Studio",
-    version: "2.0.0",
+    version: "2.1.0",
+    port: PORT,
+    environment: process.env.NODE_ENV || "development",
     db: dbStatus,
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
@@ -296,15 +313,22 @@ async function startServer() {
     });
   });
 
-  app.listen(PORT, () => {
-    console.log("");
-    console.log(`🚀 FestiveAgent AI Studio running at http://localhost:${PORT}`);
-    console.log(`📡 CORS enabled for all origins`);
-    console.log("");
+  if (require.main === module) {
+    app.listen(PORT, () => {
+      console.log("");
+      console.log(`🚀 FestiveAgent AI Studio running at http://localhost:${PORT}`);
+      console.log(`📡 CORS enabled for all origins`);
+      console.log("");
+    });
+  }
+}
+
+if (require.main === module) {
+  startServer().catch((err) => {
+    console.error("Failed to start server:", err);
+    process.exit(1);
   });
 }
 
-startServer().catch((err) => {
-  console.error("Failed to start server:", err);
-  process.exit(1);
-});
+module.exports = app;
+module.exports.startServer = startServer;

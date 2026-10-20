@@ -1669,13 +1669,25 @@
     const CLOUD_BACKEND_URL = 'https://human-shoes-tough-findings.trycloudflare.com';
 
     let API_BASE = '';
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      API_BASE = (window.location.port === '3000') ? 'http://localhost:5000' : '';
+    const isLocalhost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+    if (isLocalhost) {
+      // Local development: strictly avoid 3000 and 5000. Default to 5001 or port_config.json
+      API_BASE = localStorage.getItem('FESTIVE_API_BASE') || 'http://localhost:5001';
+      fetch('/port_config.json')
+        .then(r => r.json())
+        .then(cfg => {
+          if (cfg && cfg.apiBase) {
+            API_BASE = cfg.apiBase;
+            if (typeof syncPersistentMindStatus === 'function') syncPersistentMindStatus();
+          }
+        })
+        .catch(() => {});
     } else if (window.location.hostname.endsWith('trycloudflare.com') || window.location.hostname.endsWith('lhr.life') || window.location.hostname.endsWith('loca.lt')) {
       API_BASE = '';
     } else {
-      // Deployed on Vercel (festive-agent.vercel.app), Netlify, etc.
-      API_BASE = localStorage.getItem('FESTIVE_API_BASE') || CLOUD_BACKEND_URL;
+      // Deployed on Vercel (festive-agent.vercel.app), Netlify, or custom cloud host
+      API_BASE = localStorage.getItem('FESTIVE_API_BASE') || '';
     }
   
     // Complete Festival Profiles with Real AI Motif Art
@@ -1877,7 +1889,7 @@
       document.getElementById("sectionInspector").style.display = "block";
 
       const posterImg = document.getElementById("posterImg");
-      const fullImgUrl = campaign.imageUrl.startsWith("http") ? campaign.imageUrl : (API_BASE + campaign.imageUrl);
+      const fullImgUrl = campaign.imageDataUrl || (campaign.imageUrl.startsWith("http") ? campaign.imageUrl : (API_BASE + campaign.imageUrl));
       posterImg.src = fullImgUrl;
 
       document.getElementById("downloadLink").href = fullImgUrl;
@@ -1896,8 +1908,8 @@
 
     // Modal Handlers
     function openLightbox(url = null) {
-      let img = url || (activeCampaign ? activeCampaign.imageUrl : null);
-      if (img && !img.startsWith("http") && API_BASE) img = API_BASE + img;
+      let img = url || (activeCampaign ? (activeCampaign.imageDataUrl || activeCampaign.imageUrl) : null);
+      if (img && !img.startsWith("http") && !img.startsWith("data:") && API_BASE) img = API_BASE + img;
       if (!img) return;
       document.getElementById("lightboxImg").src = img;
       const dlBtn = document.getElementById("lightboxDownloadBtn");
@@ -1983,9 +1995,9 @@ Creating branded festival promotional posters typically leads to style drift, le
       prepareLinkedInPost(activeCampaign);
 
       const posterImg = document.getElementById("posterImg");
-      const currentImgSrc = (activeCampaign && activeCampaign.imageUrl) 
-        ? ((activeCampaign.imageUrl.startsWith("http") ? "" : API_BASE) + activeCampaign.imageUrl)
-        : (posterImg && posterImg.src ? posterImg.src : (API_BASE + "/assets/motifs/diwali.jpg"));
+      const currentImgSrc = (activeCampaign && (activeCampaign.imageDataUrl || activeCampaign.imageUrl))
+        ? (activeCampaign.imageDataUrl || (activeCampaign.imageUrl.startsWith("http") ? activeCampaign.imageUrl : (API_BASE + activeCampaign.imageUrl)))
+        : (posterImg && posterImg.src ? posterImg.src : ((API_BASE || "") + "/assets/motifs/diwali.jpg"));
 
       const downloadBtn = document.getElementById("linkedinDownloadPosterBtn");
       if (downloadBtn) {

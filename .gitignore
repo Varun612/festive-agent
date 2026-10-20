@@ -33,5 +33,8 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Binaries
+# Binaries & Runtime state
 cloudflared.exe
+.project_pids.json
+port_config.json
+frontend/port_config.json
