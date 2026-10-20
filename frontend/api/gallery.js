@@ -5,6 +5,7 @@ module.exports = (req, res) => {
   if (req.method === "OPTIONS") return res.status(200).end();
 
   const gallery = [
+    { filename: "dussehra_final.jpg", url: "/showcase/dussehra_final.jpg", title: "Dussehra Vijayadashami", variant: "Royal Maroon & Triumphant Gold" },
     { filename: "festival-diwali-var1-1789704240852.jpg", url: "/showcase/festival-diwali-var1-1789704240852.jpg", title: "Diwali Mahotsav", variant: "Radiant Deepams & Molten Gold" },
     { filename: "festival-diwali-var2-1789704243005.jpg", url: "/showcase/festival-diwali-var2-1789704243005.jpg", title: "Diwali Sapphire", variant: "Midnight Sapphire & Starlight Gold" },
     { filename: "ganesh_chaturthi_final.jpg", url: "/showcase/ganesh_chaturthi_final.jpg", title: "Ganesh Chaturthi", variant: "Royal Marigold & Auspicious Ganesha" },

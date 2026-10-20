@@ -148,7 +148,15 @@ app.post(
   async (req, res) => {
     try {
       const body = req.body || {};
-      const festival = body.festival || "Diwali";
+      const rawFest = body.festival ? String(body.festival).trim() : "";
+      if (!rawFest) {
+        return res.status(400).json({
+          success: false,
+          error: "Festival name is required. Please specify a festival (e.g. Dussehra, Diwali, Christmas, Eid).",
+          needsClarification: true,
+        });
+      }
+      const festival = rawFest;
       const variant = body.variant !== undefined ? body.variant : undefined;
       const language = body.language || "auto";
       const bgPattern = body.bgPattern || null;
@@ -224,7 +232,7 @@ app.post("/api/redesign-chat", async (req, res) => {
   try {
     const body = req.body || {};
     const prompt = body.prompt;
-    const festival = body.festival || "Diwali";
+    const rawFest = body.festival ? String(body.festival).trim() : "";
     const variantIndex = body.variantIndex;
     if (!prompt) {
       return res.status(400).json({
@@ -232,6 +240,14 @@ app.post("/api/redesign-chat", async (req, res) => {
         error: "Prompt is required.",
       });
     }
+    if (!rawFest) {
+      return res.status(400).json({
+        success: false,
+        error: "Festival name is required for redesign. Please specify the active festival.",
+        needsClarification: true,
+      });
+    }
+    const festival = rawFest;
 
     console.log(
       `[Chatbot Redesign] Prompt: "${prompt}" | Festival: "${festival}"`

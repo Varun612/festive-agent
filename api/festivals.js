@@ -5,6 +5,7 @@ module.exports = (req, res) => {
   if (req.method === "OPTIONS") return res.status(200).end();
 
   const festivals = [
+    { id: "dussehra", name: "Dussehra", defaultHindiTitle: "शुभ दशहरा", defaultEnglishTop: "HAPPY DUSSEHRA", variantsCount: 3, variants: ["Royal Maroon & Triumphant Gold", "Imperial Purple & Victory Gold", "Auspicious Saffron & Molten Brass"] },
     { id: "diwali", name: "Diwali", defaultHindiTitle: "दीपावली", defaultEnglishTop: "HAPPY DIWALI", variantsCount: 3, variants: ["Radiant Deepams & Molten Gold", "Midnight Sapphire & Starlight Gold", "Royal Velvet Maroon & Warm Brass"] },
     { id: "ganesh-chaturthi", name: "Ganesh Chaturthi", defaultHindiTitle: "गणेश चतुर्थी", defaultEnglishTop: "SHREE GANESH UTSAV", variantsCount: 3, variants: ["Royal Marigold & Auspicious Ganesha", "Molten Gold & Imperial Red", "Peacock Blue & Velvet Rose"] },
     { id: "maha-shivratri", name: "Maha Shivratri", defaultHindiTitle: "महाशिवरात्रि", defaultEnglishTop: "HAR HAR MAHADEV", variantsCount: 3, variants: ["Cosmic Indigo & Sacred Trishul", "Silver Moonlight & Sacred Bhasma", "Molten Copper & Mystic Smoked Pearl"] },

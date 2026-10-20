@@ -1365,7 +1365,7 @@
         <div class="input-group">
           <label for="festivalInput">Active Festival Name</label>
           <div class="input-wrapper">
-            <input type="text" id="festivalInput" value="Diwali" placeholder="e.g. Diwali, Christmas, Eid, Holi..." />
+            <input type="text" id="festivalInput" value="Dussehra" placeholder="e.g. Dussehra, Diwali, Christmas, Eid, Holi..." />
           </div>
         </div>
 
@@ -1437,7 +1437,7 @@
           </p>
           <button class="btn-3d btn-3d-gold" onclick="getNewDesign()">
             <span>⚡</span>
-            <span>Try Live Demo: Get Diwali Design</span>
+            <span>Try Live Demo: Generate Festival Design</span>
           </button>
         </div>
 
@@ -1692,6 +1692,7 @@
   
     // Complete Festival Profiles with Real AI Motif Art
     const FESTIVAL_DECK = [
+      { name: "Dussehra", tag: "Vijayadashami Utsav", icon: "🏹", motif: API_BASE + "/assets/motifs/dussehra.jpg" },
       { name: "Diwali", tag: "Festival of Lights", icon: "🪔", motif: API_BASE + "/assets/motifs/diwali.jpg" },
       { name: "Ganesh Chaturthi", tag: "Vinayaka Mahotsav", icon: "🐘", motif: API_BASE + "/assets/motifs/ganesh_golden.jpg" },
       { name: "Maha Shivratri", tag: "Har Har Mahadev", icon: "🔱", motif: API_BASE + "/assets/motifs/shivratri.jpg" },
@@ -1704,7 +1705,7 @@
       { name: "Raksha Bandhan", tag: "Sacred Bond", icon: "🧵", motif: API_BASE + "/assets/motifs/raksha_bandhan.jpg" }
     ];
 
-    let currentFestival = "Diwali";
+    let currentFestival = "Dussehra";
     let activeCampaign = null;
     let isChatbotOpen = false;
 
@@ -1790,7 +1791,12 @@
     }
 
     async function runCreateCampaign(preferredVariant = null) {
-      const festival = document.getElementById("festivalInput").value.trim() || currentFestival;
+      const festInputEl = document.getElementById("festivalInput");
+      const festival = festInputEl && festInputEl.value.trim() ? festInputEl.value.trim() : (currentFestival || "").trim();
+      if (!festival) {
+        showToast("⚠️ Please enter or select a festival name to generate.");
+        return;
+      }
       const refFile = document.getElementById("refFile").files[0];
       const busFile = document.getElementById("busFile").files[0];
 
@@ -1965,7 +1971,7 @@
 
     // LINKEDIN SHOWCASE SUITE
     function prepareLinkedInPost(campaign) {
-      const festName = (campaign && campaign.festival) ? campaign.festival : (currentFestival || "Diwali");
+      const festName = (campaign && campaign.festival) ? campaign.festival : (currentFestival || "Dussehra");
       const theme = (campaign && campaign.themeName) ? ` (${campaign.themeName})` : "";
       const text = `🚀 Excited to showcase FestiveAgent AI — an Autonomous 3D Multi-Agent Creative Director built for luxury hospitality & event venues!
 
@@ -1995,9 +2001,10 @@ Creating branded festival promotional posters typically leads to style drift, le
       prepareLinkedInPost(activeCampaign);
 
       const posterImg = document.getElementById("posterImg");
+      const festSlug = ((activeCampaign ? activeCampaign.festival : currentFestival) || "dussehra").toLowerCase().replace(/[^a-z0-9]/g, "_");
       const currentImgSrc = (activeCampaign && (activeCampaign.imageDataUrl || activeCampaign.imageUrl))
         ? (activeCampaign.imageDataUrl || (activeCampaign.imageUrl.startsWith("http") ? activeCampaign.imageUrl : (API_BASE + activeCampaign.imageUrl)))
-        : (posterImg && posterImg.src ? posterImg.src : ((API_BASE || "") + "/assets/motifs/diwali.jpg"));
+        : (posterImg && posterImg.src ? posterImg.src : ((API_BASE || "") + "/assets/motifs/" + festSlug + ".jpg"));
 
       const downloadBtn = document.getElementById("linkedinDownloadPosterBtn");
       if (downloadBtn) {

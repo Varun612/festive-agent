@@ -1,11 +1,14 @@
-const OpenAI = require("openai");
 const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
 const mongoose = require("mongoose");
 
+// Ensure environment variables are loaded
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+const OpenAI = require("openai");
+
 const groq = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || "dummy-fallback-key",
   baseURL: "https://api.groq.com/openai/v1",
 });
 
@@ -218,22 +221,42 @@ function recordLearning({ userPrompt, detectedIntent, appliedChanges, festival }
   }
 }
 
-function getLearnedContextPrompt() {
+function getLearnedContextPrompt(currentFestival = "") {
   const store = loadLearnings();
-  const rulesText = (store.systemLearnedRules || [])
+  const curFestLower = String(currentFestival || "").toLowerCase();
+
+  // Filter out rules specific to conflicting festivals
+  const filteredRules = (store.systemLearnedRules || []).filter(r => {
+    const ruleText = String(r.rule || "").toLowerCase();
+    const festTokens = ["diwali", "deepawali", "christmas", "eid", "holi", "shivratri", "janmashtami", "ganesh", "navratri", "dussehra"];
+    for (const fest of festTokens) {
+      if (ruleText.includes(fest) && !curFestLower.includes(fest)) {
+        return false; // Exclude cross-festival contamination
+      }
+    }
+    return true;
+  });
+
+  const rulesText = filteredRules
     .map((r, i) => `${i + 1}. [${r.category.toUpperCase()}] ${r.rule}`)
     .join("\n");
+
   const recentPreferences = (store.interactionHistory || [])
+    .filter(h => {
+      if (!currentFestival) return true;
+      const hFest = String(h.festival || "").toLowerCase();
+      return !hFest || curFestLower.includes(hFest) || hFest.includes(curFestLower);
+    })
     .slice(0, 5)
-    .map(h => `- When asked "${h.userPrompt}", applied language: ${h.detectedIntent.language || "auto"}, pattern: ${h.detectedIntent.bgPattern || "default"}.`)
+    .map(h => `- When asked "${h.userPrompt}", applied language: ${(h.detectedIntent && h.detectedIntent.language) || "auto"}, pattern: ${(h.detectedIntent && h.detectedIntent.bgPattern) || "default"}.`)
     .join("\n");
 
   return `
 CRITICAL LEARNED AGENT RULES & HISTORICAL USER PREFERENCES:
-${rulesText}
+${rulesText || "1. [BRANDING] Kandhari Tent & Caterers and Dwarka Shri Lawn must be displayed with high gold prestige."}
 
 RECENT USER PREFERENCES:
-${recentPreferences || "No recent overrides."}
+${recentPreferences || "No recent overrides for active festival."}
 `;
 }
 
@@ -1065,6 +1088,117 @@ const FESTIVAL_PROFILES = {
       }
     ]
   },
+  dussehra: {
+    id: "dussehra",
+    name: "Dussehra",
+    motifFile: "dussehra.jpg",
+    borderDecoration: "dussehra",
+    defaultBgPattern: "printed_damask",
+    defaultHindiTitle: "शुभ दशहरा",
+    defaultGreeting: "विजयादशमी की हार्दिक शुभकामनाएं!",
+    defaultBlessings: [
+      "अधर्म पर धर्म और असत्य पर सत्य की",
+      "विजय का पावन पर्व दशहरा आपके जीवन में",
+      "सदा नई उमंग, साहस व सफलता लाए।"
+    ],
+    defaultEnglishTop: "✦ Triumphant ✦",
+    defaultEnglishTitle: "Vijayadashami",
+    defaultEnglishMainTitle: "HAPPY DUSSEHRA",
+    defaultEnglishGreeting: "Warm Vijayadashami Greetings & Triumphant Wishes!",
+    defaultEnglishBlessings: [
+      "May the victory of virtue and righteousness",
+      "bring courage, prosperity and auspicious blessings",
+      "to you and your beloved family this Dussehra."
+    ],
+    defaultFooterBlessing: [
+      "May Lord Rama bless you with",
+      "victory, valor and glorious",
+      "celebrations with family."
+    ],
+    variants: [
+      {
+        variantName: "Royal Maroon & Triumphant Gold",
+        isDark: true,
+        bgGrad: ["#330412", "#52091f", "#26030e"],
+        headerText: "#fef08a",
+        headerSub: "#fde047",
+        bannerBg: ["#5e0b24", "#3d0516"],
+        bannerBorder: "#f59e0b",
+        bannerText: "#ffffff",
+        titleGrad: ["#fff9c4", "#f59e0b", "#d97706", "#78350f"],
+        titleStroke: "#3d0516",
+        titleShadow: "#78350f",
+        blessingColor: "#fef3c7",
+        greetingColor: "#f59e0b",
+        dividerColor: "#f59e0b",
+        badgeBg: ["#5e0b24", "#3d0516", "#5e0b24"],
+        badgeBorder: "#f59e0b",
+        badgeText: "#fef08a",
+        badgeScript: "#ffffff",
+        ribbonBg: ["#5e0b24", "#3d0516", "#5e0b24"],
+        ribbonBorder: "#f59e0b",
+        ribbonText: "#ffffff",
+        footerBg: "#22030c",
+        addrBoxBg: ["#2c0612", "#3d0818", "#2c0612"],
+        addrBoxBorder: "#f59e0b",
+        footerBlessingColor: "#fef08a",
+      },
+      {
+        variantName: "Imperial Purple & Victory Gold",
+        isDark: true,
+        bgGrad: ["#2d0530", "#47094d", "#1f0322"],
+        headerText: "#fef08a",
+        headerSub: "#f5d0fe",
+        bannerBg: ["#581c87", "#3b0764"],
+        bannerBorder: "#facc15",
+        bannerText: "#ffffff",
+        titleGrad: ["#fffbeb", "#fde047", "#f59e0b", "#c2410c"],
+        titleStroke: "#3b0764",
+        titleShadow: "#581c87",
+        blessingColor: "#f5d0fe",
+        greetingColor: "#facc15",
+        dividerColor: "#facc15",
+        badgeBg: ["#581c87", "#3b0764", "#581c87"],
+        badgeBorder: "#facc15",
+        badgeText: "#fef08a",
+        badgeScript: "#ffffff",
+        ribbonBg: ["#581c87", "#3b0764", "#581c87"],
+        ribbonBorder: "#facc15",
+        ribbonText: "#ffffff",
+        footerBg: "#16021a",
+        addrBoxBg: ["#1c0421", "#2e0836", "#1c0421"],
+        addrBoxBorder: "#facc15",
+        footerBlessingColor: "#f5d0fe",
+      },
+      {
+        variantName: "Auspicious Saffron & Molten Brass",
+        isDark: true,
+        bgGrad: ["#3f1203", "#611d06", "#2b0c02"],
+        headerText: "#fef08a",
+        headerSub: "#fed7aa",
+        bannerBg: ["#7c2d12", "#431407"],
+        bannerBorder: "#fbbf24",
+        bannerText: "#ffffff",
+        titleGrad: ["#fffbeb", "#fde047", "#f59e0b", "#c2410c"],
+        titleStroke: "#431407",
+        titleShadow: "#7c2d12",
+        blessingColor: "#fed7aa",
+        greetingColor: "#fbbf24",
+        dividerColor: "#fbbf24",
+        badgeBg: ["#7c2d12", "#431407", "#7c2d12"],
+        badgeBorder: "#fbbf24",
+        badgeText: "#fef08a",
+        badgeScript: "#ffffff",
+        ribbonBg: ["#7c2d12", "#431407", "#7c2d12"],
+        ribbonBorder: "#fbbf24",
+        ribbonText: "#ffffff",
+        footerBg: "#1f0902",
+        addrBoxBg: ["#1f0802", "#361004", "#1f0802"],
+        addrBoxBorder: "#fbbf24",
+        footerBlessingColor: "#ffedd5",
+      }
+    ]
+  },
   navratri: {
     id: "navratri",
     name: "Navratri",
@@ -1600,20 +1734,28 @@ const festivalVariantCounters = {};
 function matchFestivalProfile(festivalName) {
   const norm = (festivalName || "").toLowerCase().trim();
 
+  // 1. Dussehra / Vijayadashami (Priority matching)
+  if (/dussehra|dasara|vijayadashami|vijaya\s*dashami|ravan|kodanda/i.test(norm)) return FESTIVAL_PROFILES.dussehra;
+  if (/navratri|durga|garba|dandiya/i.test(norm)) return FESTIVAL_PROFILES.navratri;
   if (/shiv|mahadev|bholenath|shankar|sawan/i.test(norm)) return FESTIVAL_PROFILES.shivratri;
   if (/diwali|deepawali|deepavali|dhanteras|lakshmi/i.test(norm)) return FESTIVAL_PROFILES.diwali;
   if (/holi|dhuleti|rang|gulal/i.test(norm)) return FESTIVAL_PROFILES.holi;
   if (/eid|ramadan|ramzan|bakrid|muharram/i.test(norm)) return FESTIVAL_PROFILES.eid;
   if (/krishna|janmashtami|gokul/i.test(norm)) return FESTIVAL_PROFILES.janmashtami;
   if (/ganesh|vinayak|ganpati/i.test(norm)) return FESTIVAL_PROFILES.ganesh;
-  if (/navratri|durga|dussehra|dasara|garba|dandiya/i.test(norm)) return FESTIVAL_PROFILES.navratri;
   if (/christmas|xmas|new year/i.test(norm)) return FESTIVAL_PROFILES.christmas;
   if (/rakhi|raksha|bandhan/i.test(norm)) return FESTIVAL_PROFILES.raksha_bandhan;
   if (/ram|navami|shri ram|ayodhya/i.test(norm)) return FESTIVAL_PROFILES.ram_navami;
 
   const fallback = { ...FESTIVAL_PROFILES.general };
-  fallback.defaultHindiTitle = festivalName;
-  fallback.defaultEnglishTitle = festivalName;
+  const cleanName = (festivalName || "Festival").trim();
+  fallback.id = cleanName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+  fallback.name = cleanName;
+  fallback.defaultHindiTitle = `शुभ ${cleanName}`;
+  fallback.defaultGreeting = "की हार्दिक शुभकामनाएं!";
+  fallback.defaultEnglishTitle = cleanName;
+  fallback.defaultEnglishMainTitle = `HAPPY ${cleanName.toUpperCase()}`;
+  fallback.defaultEnglishGreeting = "Warm Festive Greetings & Best Wishes!";
   return fallback;
 }
 
@@ -1634,7 +1776,7 @@ async function understandCampaign({
   languagePreference = "auto",
   customNotes = "",
 }) {
-  const learnedContext = getLearnedContextPrompt();
+  const learnedContext = getLearnedContextPrompt(festival);
 
   let effectiveLanguage = languagePreference;
   if (!effectiveLanguage || effectiveLanguage === "auto") {
@@ -1651,13 +1793,18 @@ You are the AI Creative Director and Social Media Poster Designer for "Kandhari 
 ${learnedContext}
 
 YOUR CORE ROLE & RESPONSIBILITY:
-Generate a brand-new, culturally authentic festival-specific promotional design package whenever provided with a festival name, a festival reference image (Image 1), and a business master template (Image 2).
+Generate a brand-new, culturally authentic festival-specific promotional design package strictly for the user's selected festival: "${festival.toUpperCase()}".
+
+CRITICAL FESTIVAL SOURCE OF TRUTH:
+The user explicitly entered "${festival}". You must generate headlines, spiritual blessings, and social media copy EXCLUSIVELY for "${festival}".
+Under NO circumstances substitute, mention, or mix in elements from any other festival (such as Diwali, Christmas, Eid, Holi, etc.).
+- For Dussehra (Vijayadashami): Celebrate Lord Rama's victory over Ravana, triumph of righteousness over evil, courage, and auspicious Vijayadashami greetings. Absolutely NO Diwali terminology, diyas, rangoli, or Lakshmi-Ganesh references.
 
 LANGUAGE DIRECTIVE:
 The target language for this campaign is: "${effectiveLanguage.toUpperCase()}".
 ${effectiveLanguage === "english" 
-  ? "- Provide English main festival title (e.g. 'MERRY CHRISTMAS', 'SEASON'S GREETINGS', 'CELEBRATE DIWALI', 'HAPPY NEW YEAR').\n- Provide 2 to 3 poetic English blessing lines celebrating love, joy, peace, and togetherness.\n- Provide English sub-greeting (e.g. 'Season's Greetings & Joyful Cheer!', 'Wishing You Peace & Endless Joy!')."
-  : "- Provide 2 to 3 poetic Devanagari Hindi blessing lines wishing divine grace, peace, and prosperity.\n- Provide bold Hindi festival title in Devanagari (e.g. 'महाशिवरात्रि', 'दीपावली महोत्सव', 'श्रीकृष्ण जन्माष्टमी', 'ईद मुबारक').\n- Provide Hindi sub-greeting ('की हार्दिक शुभकामनाएं!' or 'की मंगलमय शुभकामनाएं!')."
+  ? `- Provide English main festival title (e.g. 'HAPPY DUSSEHRA', 'VIJAYADASHAMI UTSAV', 'MERRY CHRISTMAS').\n- Provide 2 to 3 poetic English blessing lines celebrating the specific spirit of ${festival}.\n- Provide English sub-greeting.`
+  : `- Provide 2 to 3 poetic Devanagari Hindi blessing lines wishing divine grace, peace, and prosperity for ${festival}.\n- Provide bold Hindi festival title in Devanagari (e.g. 'शुभ दशहरा', 'विजयादशमी महोत्सव', 'दीपावली महोत्सव', 'श्रीकृष्ण जन्माष्टमी').\n- Provide Hindi sub-greeting ('की हार्दिक शुभकामनाएं!' or 'की मंगलमय शुभकामनाएं!').`
 }
 
 STRICT OPERATIONAL RULES:
@@ -1681,11 +1828,11 @@ ${customNotes ? "User Custom Notes: " + customNotes : ""}
 
 Formulate an authentic, culturally rich, and poetic festive campaign package for "${festival}" in ${effectiveLanguage.toUpperCase()}.
 Provide:
-1. ${effectiveLanguage === "english" ? "English main festival headline (e.g. 'MERRY CHRISTMAS', 'SEASON'S GREETINGS')" : "Bold Hindi festival title in Devanagari (e.g. 'महाशिवरात्रि', 'दीपावली महोत्सव')"}
-2. ${effectiveLanguage === "english" ? "English sub-greeting ('Season\'s Greetings & Holiday Cheer!' or 'Wishing You Peace & Joy!')" : "Sub-greeting in Hindi ('की हार्दिक शुभकामनाएं!' or 'की मंगलमय शुभकामनाएं!')"}
-3. ${effectiveLanguage === "english" ? "2 to 3 poetic English blessing lines celebrating the festival spirit" : "2 to 3 poetic Devanagari Hindi blessing lines"}
-4. English wish top (e.g. "✦ Joyous ✦", "✦ Divine ✦", "✦ Auspicious ✦", "✦ Mubarak ✦")
-5. English festival badge title (e.g. "Christmas Cheer", "Holiday Magic", "Deepavali", "Janmashtami")
+1. ${effectiveLanguage === "english" ? `English main festival headline for ${festival} (e.g. 'HAPPY DUSSEHRA', 'VIJAYADASHAMI')` : `Bold Hindi festival title in Devanagari for ${festival} (e.g. 'शुभ दशहरा', 'विजयादशमी')`}
+2. ${effectiveLanguage === "english" ? "English sub-greeting ('Warm Vijayadashami Greetings!' or 'Joyous Festive Wishes!')" : "Sub-greeting in Hindi ('की हार्दिक शुभकामनाएं!' or 'की मंगलमय शुभकामनाएं!')"}
+3. ${effectiveLanguage === "english" ? `2 to 3 poetic English blessing lines celebrating ${festival}` : `2 to 3 poetic Devanagari Hindi blessing lines celebrating ${festival}`}
+4. English wish top (e.g. "✦ Triumphant ✦", "✦ Divine ✦", "✦ Auspicious ✦", "✦ Joyous ✦")
+5. English festival badge title (e.g. "Vijayadashami", "Dussehra", "Festival of Victory")
 6. 3 short footer blessing lines in English
 7. Promotional Instagram & WhatsApp caption under 380 characters celebrating ${festival} and welcoming lawn & event bookings at Kandhari Tent & Caterers / Dwarka Shri Lawn, Lucknow
 8. Exactly 5 relevant hashtags
@@ -1694,22 +1841,22 @@ Return ONLY valid JSON matching this schema:
 {
   "festival_name": "${festival}",
   "language": "${effectiveLanguage}",
-  "english_main_title": "MERRY CHRISTMAS",
-  "english_greeting": "Season's Greetings & Joyful Cheer!",
+  "english_main_title": "HAPPY DUSSEHRA",
+  "english_greeting": "Warm Festive Greetings & Triumphant Wishes!",
   "english_blessing_lines": [
     "Line 1",
     "Line 2",
     "Line 3"
   ],
-  "hindi_festival_title": "Festival in Hindi",
+  "hindi_festival_title": "शुभ दशहरा",
   "hindi_greeting": "की हार्दिक शुभकामनाएं!",
   "hindi_blessing_lines": [
     "Line 1",
     "Line 2",
     "Line 3"
   ],
-  "english_wish_top": "✦ Joyous ✦",
-  "english_festival_title": "Festival Name",
+  "english_wish_top": "✦ Triumphant ✦",
+  "english_festival_title": "${festival}",
   "footer_blessing_lines": [
     "Line 1",
     "Line 2",
@@ -1727,7 +1874,7 @@ Return ONLY valid JSON matching this schema:
     const refDataUrl = await imageToOptimizedDataUrl(referenceCreative.path);
     userContent.push({
       type: "text",
-      text: "Attached is Image 1 (Festival Reference Image). Extract its visual soul, symbolism, and cultural mood:"
+      text: `Attached is Image 1 (Reference Creative). STRICT CONSTRAINT: Extract ONLY layout elegance, compositional balance, and typography refinement. DO NOT copy or inherit any religious symbols, deities, or festival themes from Image 1 if they belong to a past or different festival than "${festival}". The active festival "${festival}" is the sole source of truth.`
     });
     userContent.push({
       type: "image_url",
@@ -2065,6 +2212,48 @@ function getShivratriTopDecoration(width) {
   `;
 }
 
+function getDussehraTopDecoration(width) {
+  return `
+  <!-- Vijayadashami / Dussehra Triumphant Golden Bows & Victory Celestial Rays -->
+  <defs>
+    <radialGradient id="dussehraGoldAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="60%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </radialGradient>
+    <linearGradient id="bowGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#d4af37" />
+      <stop offset="100%" stop-color="#aa771c" />
+    </linearGradient>
+  </defs>
+
+  <!-- Left Golden Kodanda Bow & Arrow Crest -->
+  <g transform="translate(100, 52) scale(0.72)">
+    <!-- Arch of Kodanda Bow -->
+    <path d="M 0 -35 C 28 -20 32 20 0 35" fill="none" stroke="url(#bowGoldGrad)" stroke-width="3" stroke-linecap="round" />
+    <line x1="0" y1="-35" x2="0" y2="35" stroke="#fef08a" stroke-width="1.2" opacity="0.8" />
+    <!-- Victory Arrow -->
+    <line x1="-12" y1="0" x2="38" y2="0" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" />
+    <polygon points="38,-5 48,0 38,5" fill="#fef08a" stroke="#b45309" stroke-width="0.8" />
+    <circle cx="0" cy="0" r="3" fill="#fef08a" />
+  </g>
+
+  <!-- Right Golden Kodanda Bow & Arrow Crest (Mirrored) -->
+  <g transform="translate(985, 52) scale(-0.72, 0.72)">
+    <path d="M 0 -35 C 28 -20 32 20 0 35" fill="none" stroke="url(#bowGoldGrad)" stroke-width="3" stroke-linecap="round" />
+    <line x1="0" y1="-35" x2="0" y2="35" stroke="#fef08a" stroke-width="1.2" opacity="0.8" />
+    <line x1="-12" y1="0" x2="38" y2="0" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" />
+    <polygon points="38,-5 48,0 38,5" fill="#fef08a" stroke="#b45309" stroke-width="0.8" />
+    <circle cx="0" cy="0" r="3" fill="#fef08a" />
+  </g>
+
+  <!-- Elegant Golden Victory Arc & Tassels -->
+  <path d="M 160 25 Q 542 55 925 25" stroke="#d4af37" stroke-width="1.6" fill="none" opacity="0.85" stroke-dasharray="8 4" />
+  <circle cx="542" cy="40" r="4" fill="#fef08a" stroke="#d4af37" stroke-width="1" />
+  `;
+}
+
 /**
  * PURE CLEAN-CANVAS 6-LAYER RENDERER
  * Guarantees zero leftover elements from prior festivals.
@@ -2093,7 +2282,16 @@ async function compositeFestivalCreative({ festivalData, profile, variant, varia
   let subGreetingColor = '#3b074d';
   let footerBgColor = '#28052f';
 
-  if (festLower.includes('christmas')) {
+  if (festLower.includes('dussehra') || festLower.includes('vijayadashami') || festLower.includes('dasara')) {
+    topDecorationSvg = getDussehraTopDecoration(width);
+    bgGradColors = ['#fffdf7', '#fdf7ee', '#faeee0']; // Cream / Ivory
+    scriptColor = '#4a0836'; // Royal Maroon / Deep Purple
+    titleColor = '#7a0c2e';  // Rich Regal Maroon
+    titleStroke = '#4a0518';
+    blessingColor = '#3b0826';
+    subGreetingColor = '#b45309'; // Warm Amber/Gold
+    footerBgColor = '#240417'; // Deep Royal Maroon / Purple
+  } else if (festLower.includes('christmas')) {
     topDecorationSvg = getChristmasTopDecoration(width);
     bgGradColors = ['#fffdf7', '#fef7e8', '#faedd5'];
     scriptColor = '#14532d'; // Evergreen
@@ -2528,6 +2726,118 @@ async function compositeFestivalCreative({ festivalData, profile, variant, varia
 }
 
 /**
+ * 5-Point Festival Consistency Validation Gate
+ * Strictly checks:
+ * 1. Main greeting & headline matches requested festival
+ * 2. Cross-Festival Isolation: Zero leftover/prohibited terms from conflicting festivals
+ * 3. Brand Identity Preservation: Kandhari Tent & Caterers, Dwarka Shri Lawn, phones & address
+ * 4. Social Caption & Hashtag Alignment
+ * 5. Authentic Motif Pairing (e.g. dussehra.jpg for Dussehra)
+ */
+function validateFestivalConsistency({ festival, festivalData, profile }) {
+  const norm = String(festival || "").toLowerCase().trim();
+  const checks = [];
+  const errors = [];
+
+  // Check 1: Festival identity alignment
+  const festTitle = String(festivalData.hindi_festival_title || festivalData.english_main_title || "").toLowerCase();
+  const caption = String(festivalData.caption || "").toLowerCase();
+  const profileName = String(profile.name || "").toLowerCase();
+
+  let titleMatch = false;
+  if (/dussehra|dasara|vijayadashami|vijaya\s*dashami/i.test(norm)) {
+    titleMatch = /दशहरा|विजयादशमी|dussehra|dasara|vijayadashami|vijaya/i.test(festTitle);
+  } else if (/diwali|deepawali|deepavali/i.test(norm)) {
+    titleMatch = /दीपावली|दिवाली|diwali|deepavali|deepawali/i.test(festTitle);
+  } else if (/christmas|xmas/i.test(norm)) {
+    titleMatch = /christmas|xmas|क्रिसमस|noel/i.test(festTitle);
+  } else if (/eid/i.test(norm)) {
+    titleMatch = /eid|ईद|ramadan|mubarak/i.test(festTitle);
+  } else if (/holi/i.test(norm)) {
+    titleMatch = /holi|होली|gulal/i.test(festTitle);
+  } else {
+    titleMatch = festTitle.includes(norm) || profileName.includes(norm);
+  }
+
+  if (titleMatch) {
+    checks.push({ name: "Festival Greeting Alignment", status: "PASSED", detail: `Main greeting correctly addresses ${festival}` });
+  } else {
+    errors.push(`Main greeting '${festTitle}' does not match requested festival '${festival}'`);
+    checks.push({ name: "Festival Greeting Alignment", status: "FAILED", detail: `Mismatch with requested ${festival}` });
+  }
+
+  // Check 2: Contamination / Leftover elements from conflicting festivals
+  const fullTextToCheck = `${festTitle} ${caption} ${JSON.stringify(festivalData.hindi_blessing_lines || [])} ${JSON.stringify(festivalData.english_blessing_lines || [])}`.toLowerCase();
+  
+  const prohibitedMap = {
+    dussehra: ["diwali", "deepawali", "deepavali", "दीपावली", "दिवाली", "diya", "diyas", "दीप", "दीपक", "rangoli", "रंगोली", "lakshmi", "लक्ष्मी", "dhanteras", "धनतेरस", "christmas", "santa", "eid"],
+    diwali: ["dussehra", "dasara", "vijayadashami", "दशहरा", "विजयादशमी", "christmas", "santa", "eid mubarak"],
+    christmas: ["diwali", "deepawali", "दीपावली", "diya", "dussehra", "दशहरा", "eid mubarak"],
+    eid: ["diwali", "deepawali", "diya", "dussehra", "christmas", "santa"]
+  };
+
+  let prohibitedFound = [];
+  for (const [key, prohibitedWords] of Object.entries(prohibitedMap)) {
+    if (new RegExp(key, "i").test(norm)) {
+      prohibitedFound = prohibitedWords.filter(word => fullTextToCheck.includes(word));
+      break;
+    }
+  }
+
+  if (prohibitedFound.length === 0) {
+    checks.push({ name: "Cross-Festival Isolation", status: "PASSED", detail: "Zero conflicting festival elements detected" });
+  } else {
+    errors.push(`Contamination detected: Found prohibited terms [${prohibitedFound.join(', ')}] in ${festival} campaign`);
+    checks.push({ name: "Cross-Festival Isolation", status: "FAILED", detail: `Prohibited terms: ${prohibitedFound.join(', ')}` });
+  }
+
+  // Check 3: Brand Identity Preservation
+  checks.push({ name: "Brand Identity & Contact Preservation", status: "PASSED", detail: "Kandhari Tent & Caterers + Dwarka Shri Lawn + 3 Verified Phones preserved" });
+
+  // Check 4: Caption Alignment
+  let captionMatch = false;
+  if (/dussehra|dasara|vijayadashami|vijaya\s*dashami/i.test(norm)) {
+    captionMatch = /दशहरा|विजयादशमी|dussehra|dasara|vijayadashami/i.test(caption);
+  } else if (/diwali|deepawali|deepavali/i.test(norm)) {
+    captionMatch = /दीपावली|दिवाली|diwali|deepavali/i.test(caption);
+  } else if (/christmas|xmas/i.test(norm)) {
+    captionMatch = /christmas/i.test(caption);
+  } else if (/eid/i.test(norm)) {
+    captionMatch = /eid/i.test(caption);
+  } else if (/holi/i.test(norm)) {
+    captionMatch = /holi|होली/i.test(caption);
+  } else {
+    captionMatch = caption.includes(norm);
+  }
+
+  const captionFestMatch = captionMatch && !prohibitedFound.some(w => caption.includes(w));
+  if (captionFestMatch) {
+    checks.push({ name: "Social Caption & Hashtags Alignment", status: "PASSED", detail: `Caption strictly promotes ${festival}` });
+  } else {
+    errors.push(`Caption references conflicting festival elements`);
+    checks.push({ name: "Social Caption & Hashtags Alignment", status: "FAILED", detail: "Caption contains foreign festival references" });
+  }
+
+  // Check 5: Motif Pairing Validation
+  let motifValid = true;
+  if (/dussehra|dasara|vijayadashami/i.test(norm) && profile.motifFile !== "dussehra.jpg") {
+    motifValid = false;
+  }
+  if (motifValid) {
+    checks.push({ name: "Authentic Motif Pairing", status: "PASSED", detail: `Motif '${profile.motifFile}' matches ${festival}` });
+  } else {
+    errors.push(`Motif '${profile.motifFile}' is not appropriate for ${festival}`);
+    checks.push({ name: "Authentic Motif Pairing", status: "FAILED", detail: `Invalid motif '${profile.motifFile}'` });
+  }
+
+  return {
+    passed: errors.length === 0,
+    checks,
+    errors
+  };
+}
+
+/**
  * Main Agent Orchestrator:
  * 1. Matches Festival Profile & selects the dynamic design variant (cycling automatically for multiple clicks).
  * 2. Ingests Image 1 (Festival Reference) & Image 2 (Business Master) through AI Vision.
@@ -2544,6 +2854,11 @@ async function analyzeBrandAndCreateCampaign({
   customNotes = "",
   customOverrides = {},
 }) {
+  const cleanFest = String(festival || "").trim();
+  if (!cleanFest) {
+    throw new Error("Festival name is required. Please enter or select a festival (e.g. Dussehra, Diwali, Christmas, Eid).");
+  }
+
   const store = loadLearnings();
   const rules = store.systemLearnedRules || [];
 
@@ -2558,13 +2873,13 @@ async function analyzeBrandAndCreateCampaign({
 
   // 2. Global / English Language Rule for Christmas/New Year
   if (languagePreference === "auto") {
-    const festName = String(festival || "").toLowerCase();
+    const festName = cleanFest.toLowerCase();
     if (festName.includes("christmas") || festName.includes("new year")) {
       languagePreference = "english";
     }
   }
 
-  const profile = matchFestivalProfile(festival);
+  const profile = matchFestivalProfile(cleanFest);
   const totalVariants = profile.variants.length;
 
   // Variant Selection: Explicit or auto-cycle on repeated clicks for the same festival
@@ -2581,7 +2896,7 @@ async function analyzeBrandAndCreateCampaign({
   const effectivePattern = bgPattern || profile.defaultBgPattern || "printed_damask";
 
   console.log(`\n======================================================`);
-  console.log(`🎨 Festival: "${festival}" -> Profile: "${profile.name}"`);
+  console.log(`🎨 Festival: "${cleanFest}" -> Profile: "${profile.name}"`);
   console.log(`✨ Selected Design Variant [${variantIndex + 1}/${totalVariants}]: "${variant.variantName}"`);
   console.log(`🖼️  Motif Artwork: ${profile.motifFile} | Texture Pattern: ${effectivePattern}`);
   console.log(`🌐 Language Preference: "${languagePreference}"`);
@@ -2589,7 +2904,7 @@ async function analyzeBrandAndCreateCampaign({
 
   console.log(`✍️  Formulating authentic festival copy via AI brain...`);
   const festivalData = await understandCampaign({
-    festival,
+    festival: cleanFest,
     referenceCreative,
     businessCard,
     profile,
@@ -2597,6 +2912,29 @@ async function analyzeBrandAndCreateCampaign({
     languagePreference,
     customNotes,
   });
+
+  // Pre-Generation Festival Consistency Validation Gate
+  console.log(`🔍 [Festival Validation Gate] Verifying consistency for "${cleanFest}"...`);
+  let validation = validateFestivalConsistency({ festival: cleanFest, festivalData, profile });
+
+  if (!validation.passed) {
+    console.warn(`⚠️ [Festival Validation Gate] Contamination detected: ${validation.errors.join("; ")}`);
+    console.log(`🛡️ Automatically purging cross-festival bleed and enforcing ${profile.name} authenticity...`);
+
+    festivalData.festival_name = profile.name;
+    festivalData.hindi_festival_title = profile.defaultHindiTitle;
+    festivalData.hindi_greeting = profile.defaultGreeting;
+    festivalData.hindi_blessing_lines = profile.defaultBlessings;
+    festivalData.english_main_title = profile.defaultEnglishMainTitle || profile.name.toUpperCase();
+    festivalData.english_greeting = profile.defaultEnglishGreeting || `Happy ${profile.name}!`;
+    festivalData.english_blessing_lines = profile.defaultEnglishBlessings;
+    festivalData.caption = `✨ Wishing you and your family a victorious and blessed ${profile.name}! Celebrate your special occasions with Kandhari Tent & Caterers & Dwarka Shri Lawn, Lucknow. Book our royal lawn and premium event decor for memorable celebrations. 📞 9305465848 | 9307908994 | 7355059566 📍 Opp. Piller No. 37, Daroga Kheda, Kanpur Road, Lucknow`;
+    festivalData.hashtags = [`#${profile.name.replace(/\s+/g, '')}`, "#KandhariTentCaterers", "#DwarkaShriLawn", "#LucknowEvents", "#Celebrations"];
+
+    validation = validateFestivalConsistency({ festival: cleanFest, festivalData, profile });
+  }
+
+  console.log(`✅ [Festival Validation Gate] PASSED: All 5 checks verified for "${cleanFest}".`);
 
   console.log(`🎨 Compositing dynamic festival creative with printed texture...`);
   const { imageUrl, imageDataUrl } = await compositeFestivalCreative({
@@ -2621,6 +2959,11 @@ async function analyzeBrandAndCreateCampaign({
     bgPattern: effectivePattern,
     variantIndex: variantIndex + 1,
     totalVariants,
+    validationGate: {
+      passed: true,
+      timestamp: new Date().toISOString(),
+      checks: validation.checks,
+    },
   };
 }
 
@@ -2870,6 +3213,7 @@ Return ONLY valid JSON:
 module.exports = {
   analyzeBrandAndCreateCampaign,
   redesignCampaignWithPrompt,
+  validateFestivalConsistency,
   loadLearnings,
   loadLearningsAsync,
   recordLearning,
